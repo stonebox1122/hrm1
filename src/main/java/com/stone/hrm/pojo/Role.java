@@ -1,7 +1,12 @@
 package com.stone.hrm.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
+
 /**
  * role实体类
  * @author Administrator
@@ -9,7 +14,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="tb_role")
-public class Role implements Serializable{
+public class Role implements Serializable, GrantedAuthority {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +26,8 @@ public class Role implements Serializable{
 	private String description;//角色描述
 	private Integer status;//状态：0为禁用，1为启用
 	private java.util.Date createTime;//创建时间
+	@ManyToMany(mappedBy = "roles")
+	private List<User> users;
 
 	
 	public Integer getId() {
@@ -59,5 +66,9 @@ public class Role implements Serializable{
 	}
 
 
-	
+	@JsonIgnore
+	@Override
+	public String getAuthority() {
+		return name;
+	}
 }

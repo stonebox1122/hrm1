@@ -1,6 +1,6 @@
 package com.stone.hrm.controller;
-import entity.Result;
-import entity.StatusCode;
+import com.stone.hrm.common.entity.Result;
+import com.stone.hrm.common.entity.StatusCode;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

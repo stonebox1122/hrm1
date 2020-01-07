@@ -1,7 +1,15 @@
 package com.stone.hrm.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * user实体类
  * @author Administrator
@@ -9,7 +17,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="tb_user")
-public class User implements Serializable{
+public class User implements Serializable, UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +29,8 @@ public class User implements Serializable{
 	private String password;//登录密码
 	private Integer status;//状态：0为禁用，1为启用
 	private java.util.Date createTime;//创建时间
+	@ManyToMany
+	private List<Role> roles = new ArrayList<>();
 
 	
 	public Integer getId() {
@@ -30,13 +40,16 @@ public class User implements Serializable{
 		this.id = id;
 	}
 
+	@Override
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+	@Override
 	public String getPassword() {
 		return password;
 	}
@@ -58,6 +71,41 @@ public class User implements Serializable{
 		this.createTime = createTime;
 	}
 
+	public List<Role> getRoles() {
+		return roles;
+	}
 
-	
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
+	}
 }

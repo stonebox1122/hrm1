@@ -19,3 +19,7 @@ spring:
 logging:
   level:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+rsa:
+  key:
+    publicKeyFile: D:\auth_key\rsa_key.pub
+    privateKeyFile: D:\auth_key\rsa_key
