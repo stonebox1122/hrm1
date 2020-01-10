@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,6 +24,7 @@ import java.util.Map;
  *
  */
 @Service
+@Transactional
 public class RoleService {
 
 	@Autowired
@@ -30,6 +32,16 @@ public class RoleService {
 	
 //	@Autowired
 //	private IdWorker idWorker;
+
+	/**
+	 * 根据角色名称查询启用的角色
+	 * @param name
+	 * @param status
+	 * @return
+	 */
+	public Role findByNameAndStatus(String name, int status) {
+		return roleDao.findByNameAndStatus(name, status);
+	}
 
 	/**
 	 * 查询全部列表

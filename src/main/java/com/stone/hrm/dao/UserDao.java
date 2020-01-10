@@ -1,12 +1,8 @@
 package com.stone.hrm.dao;
 
+import com.stone.hrm.pojo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-
-import com.stone.hrm.pojo.User;
-import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 /**
  * user数据访问接口
@@ -14,6 +10,5 @@ import java.util.List;
  *
  */
 public interface UserDao extends JpaRepository<User,Integer>,JpaSpecificationExecutor<User>{
-    @Query(value = "select id,username,password,status from user where status=1 and username=?", nativeQuery = true)
-    public User findByUsername(String username);
+    public User findByUsernameAndStatus(String username, int status);
 }

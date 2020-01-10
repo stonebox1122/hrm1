@@ -1,27 +1,56 @@
 package com.stone.hrm.config;
 
+import com.stone.hrm.filter.JwtLoginFilter;
+import com.stone.hrm.filter.JwtVerifyFilter;
+import com.stone.hrm.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * 安全配置类
  */
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+@EnableGlobalMethodSecurity(securedEnabled=true)
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RsaKeyProperties prop;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    //指定认证对象的来源
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        // authorizeRequests是所有security全注解配置实现的开端，表示开始需要的权限
-        // 需要的权限分两部分，第一部分是拦截的路径，第二部分是访问该路径需要的权限
-        // antMatchers表示拦截什么路径，permitAll任何权限都可以访问
-        // anyRequest任何的请求，authenticated认证偶才能访问
-        // and().csrf().disable()固定写法，表示是csfr拦截失效
-        http
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
+    }
+    //SpringSecurity配置信息
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and().csrf().disable();
+                //.antMatchers("/product").hasAnyRole("USER")
+                .anyRequest()
+                .authenticated()
+                .and()
+                .addFilter(new JwtLoginFilter(super.authenticationManager(), prop))
+                .addFilter(new JwtVerifyFilter(super.authenticationManager(), prop))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 }
+

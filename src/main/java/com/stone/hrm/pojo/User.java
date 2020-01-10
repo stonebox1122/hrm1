@@ -1,6 +1,7 @@
 package com.stone.hrm.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,17 +24,28 @@ public class User implements Serializable, UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;//ID
-
-
-	
 	private String username;//员工工号
 	private String password;//登录密码
 	private Integer status;//状态：0为禁用，1为启用
 	private java.util.Date createTime;//创建时间
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "tb_user_role",
+			joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+			inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+	)
+    @JsonIgnoreProperties(value = { "users" })
 	private List<Role> roles = new ArrayList<>();
 
-	
+	public User() {
+	}
+
+	public User(String username, String password, Integer status, Date createTime) {
+		this.username = username;
+		this.password = password;
+		this.status = status;
+		this.createTime = createTime;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -71,15 +84,15 @@ public class User implements Serializable, UserDetails {
 		this.createTime = createTime;
 	}
 
-	public List<Role> getRoles() {
-		return roles;
-	}
+    public List<Role> getRoles() {
+        return roles;
+    }
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
 
-	@JsonIgnore
+    @JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
@@ -108,4 +121,5 @@ public class User implements Serializable, UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles;
 	}
+
 }

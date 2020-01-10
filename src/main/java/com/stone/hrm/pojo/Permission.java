@@ -2,6 +2,9 @@ package com.stone.hrm.pojo;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * permission实体类
  * @author Administrator
@@ -14,14 +17,17 @@ public class Permission implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;//ID
-
-
-	
 	private String name;//权限名称
 	private String description;//权限描述
 	private Integer type;//权限类型 1为菜单 2为功能 3为API
 	private Integer status;//状态：0为禁用，1为启用
 	private java.util.Date createTime;//创建时间
+	@ManyToMany
+	@JoinTable(name = "tb_role_permission",
+			joinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")},
+			inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+	)
+	private Set<Role> roles = new HashSet<>();
 
 	
 	public Integer getId() {
@@ -66,6 +72,4 @@ public class Permission implements Serializable{
 		this.createTime = createTime;
 	}
 
-
-	
 }

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,6 +27,7 @@ import java.util.Map;
  *
  */
 @Service
+@Transactional
 public class UserService implements UserDetailsService {
 
 	@Autowired
@@ -33,6 +35,16 @@ public class UserService implements UserDetailsService {
 
 //	@Autowired
 //	private IdWorker idWorker;
+
+	/**
+	 * 根据工号查询正常状态的用户
+	 * @param username
+	 * @param status
+	 * @return
+	 */
+	public User findByUsernameAndStatus(String username, int status){
+		return userDao.findByUsernameAndStatus(username, status);
+	}
 
 	/**
 	 * 查询全部列表
@@ -131,6 +143,6 @@ public class UserService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-		return userDao.findByUsername(s);
+		return userDao.findByUsernameAndStatus(s, 1);
 	}
 }
