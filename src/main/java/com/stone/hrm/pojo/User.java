@@ -1,7 +1,10 @@
 package com.stone.hrm.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,6 +22,8 @@ import java.util.List;
  */
 @Entity
 @Table(name="tb_user")
+@DynamicInsert
+@DynamicUpdate
 public class User implements Serializable, UserDetails {
 
 	@Id
@@ -27,7 +32,19 @@ public class User implements Serializable, UserDetails {
 	private String username;//员工工号
 	private String password;//登录密码
 	private Integer status;//状态：0为禁用，1为启用
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createTime;//创建时间
+	/**
+	 * 注意：
+	 * 1. 如果@ManyToMany不设置fetch = FetchType.EAGER会出现以下报错
+	 * 	java.lang.RuntimeException: org.hibernate.LazyInitializationException: failed to lazily initialize a collection of role: com.stone.hrm.pojo.User.roles, could not initialize proxy - no Session
+	 * 	java.lang.IllegalStateException: getWriter() has already been called for this response
+	 *
+	 * 	2. 如果不设置@JsonIgnoreProperties(value = { "users" })，会出现以下报错
+	 * 	json序列化出错：com.stone.hrm.pojo.User@495a8cb0
+	 * 	com.fasterxml.jackson.databind.JsonMappingException: failed to lazily initialize a collection of role: com.stone.hrm.pojo.Role.users, could not initialize proxy - no Session
+	 *
+	 */
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "tb_user_role",
 			joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},

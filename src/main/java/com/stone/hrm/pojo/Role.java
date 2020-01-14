@@ -1,5 +1,6 @@
 package com.stone.hrm.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,7 +26,12 @@ public class Role implements Serializable, GrantedAuthority {
 	private String name;//角色名称
 	private String description;//角色描述
 	private Integer status;//状态：0为禁用，1为启用
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createTime;//创建时间
+	/**
+	 * 注意：
+	 * 1. 此处@ManyToMany(mappedBy = "roles")中不要设置fetch = FetchType.EAGER，保持默认的Lazy，否则会再以role_id为条件来查询
+	 */
 	@ManyToMany(mappedBy = "roles")
 	private List<User> users = new ArrayList<>();
 

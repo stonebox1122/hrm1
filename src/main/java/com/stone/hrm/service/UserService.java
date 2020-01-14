@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,9 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 //	@Autowired
 //	private IdWorker idWorker;
@@ -92,9 +96,10 @@ public class UserService implements UserDetailsService {
 	 * 增加
 	 * @param user
 	 */
-	public void add(User user) {
+	public User add(User user) {
 		// user.setId( idWorker.nextId()+"" ); 雪花分布式ID生成器
-		userDao.save(user);
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		return userDao.save(user);
 	}
 
 	/**
@@ -120,6 +125,10 @@ public class UserService implements UserDetailsService {
 	 */
 	private Specification<User> createSpecification(Map searchMap) {
 
+		if (searchMap == null){
+			return null;
+		}
+
 		return new Specification<User>() {
 
 			@Override
@@ -144,5 +153,15 @@ public class UserService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 		return userDao.findByUsernameAndStatus(s, 1);
+	}
+
+    public User updateStatusById(int status, int id) {
+		int userId = userDao.updateStatusById(status, id);
+		return findById(id);
+    }
+
+    public User insertRoleById(int userId, int roleId) {
+		userDao.insertRoleById(userId, roleId);
+		return findById(userId);
 	}
 }

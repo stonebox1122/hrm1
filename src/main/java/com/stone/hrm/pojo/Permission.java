@@ -1,5 +1,7 @@
 package com.stone.hrm.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -21,6 +23,7 @@ public class Permission implements Serializable{
 	private String description;//权限描述
 	private Integer type;//权限类型 1为菜单 2为功能 3为API
 	private Integer status;//状态：0为禁用，1为启用
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createTime;//创建时间
 	@ManyToMany
 	@JoinTable(name = "tb_role_permission",

@@ -16,6 +16,9 @@ spring:
     properties:
       hibernate.format_sql: true
     open-in-view: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
 logging:
   level:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
