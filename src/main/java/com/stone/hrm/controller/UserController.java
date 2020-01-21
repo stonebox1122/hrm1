@@ -127,9 +127,15 @@ public class UserController {
         return new Result(true, StatusCode.OK, "删除成功");
     }
 
+    /**
+     * 位用户授予角色，可以删除已有角色和新增角色
+     * @param id
+     * @param role
+     * @return
+     */
     @RequestMapping(value = "/{id}/role", method = RequestMethod.PUT)
     public Result insertRoleById(@PathVariable int id, @RequestBody Role role) {
-        return new Result(true, StatusCode.OK, "授予权限成功", userService.insertRoleById(id, role.getId()));
+        return new Result(true, StatusCode.OK, "授予角色成功", userService.insertRoleById(id, role.getId()));
     }
 
 }
