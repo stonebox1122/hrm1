@@ -1,141 +1,66 @@
 package com.stone.hrm.service;
 
-import com.stone.hrm.dao.RoleDao;
 import com.stone.hrm.pojo.Role;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.github.pagehelper.Page;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * role服务层
- * 
- * @author Administrator
- *
- */
-@Service
-@Transactional
-public class RoleService {
+public interface RoleService {
 
-	@Autowired
-	private RoleDao roleDao;
-	
-//	@Autowired
-//	private IdWorker idWorker;
+    /***
+     * 查询所有角色
+     * @return
+     */
+    List<Role> findAll();
 
-	/**
-	 * 根据角色名称查询启用的角色
-	 * @param name
-	 * @param status
-	 * @return
-	 */
-	public Role findByNameAndStatus(String name, int status) {
-		return roleDao.findByNameAndStatus(name, status);
-	}
+    /**
+     * 根据ID查询
+     * @param id
+     * @return
+     */
+    Role findById(Integer id);
 
-	/**
-	 * 查询全部列表
-	 * @return
-	 */
-	public List<Role> findAll() {
-		return roleDao.findAll();
-	}
+    /***
+     * 新增角色
+     * @param role
+     */
+    void add(Role role);
 
-	
-	/**
-	 * 条件查询+分页
-	 * @param whereMap
-	 * @param page
-	 * @param size
-	 * @return
-	 */
-	public Page<Role> findSearch(Map whereMap, int page, int size) {
-		Specification<Role> specification = createSpecification(whereMap);
-		PageRequest pageRequest =  PageRequest.of(page-1, size);
-		return roleDao.findAll(specification, pageRequest);
-	}
+    /***
+     * 修改角色数据
+     * @param role
+     */
+    void update(Role role);
 
-	
-	/**
-	 * 条件查询
-	 * @param whereMap
-	 * @return
-	 */
-	public List<Role> findSearch(Map whereMap) {
-		Specification<Role> specification = createSpecification(whereMap);
-		return roleDao.findAll(specification);
-	}
+    /***
+     * 删除角色
+     * @param id
+     */
+    void delete(Integer id);
 
-	/**
-	 * 根据ID查询实体
-	 * @param id
-	 * @return
-	 */
-	public Role findById(Integer id) {
-		return roleDao.findById(id).get();
-	}
+    /***
+     * 多条件搜索角色方法
+     * @param searchMap
+     * @return
+     */
+    List<Role> findList(Map<String, Object> searchMap);
 
-	/**
-	 * 增加
-	 * @param role
-	 */
-	public void add(Role role) {
-		// role.setId( idWorker.nextId()+"" ); 雪花分布式ID生成器
-		roleDao.save(role);
-	}
+    /***
+     * 分页查询
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<Role> findPage(int page, int size);
 
-	/**
-	 * 修改
-	 * @param role
-	 */
-	public void update(Role role) {
-		roleDao.save(role);
-	}
-
-	/**
-	 * 删除
-	 * @param id
-	 */
-	public void deleteById(Integer id) {
-		roleDao.deleteById(id);
-	}
-
-	/**
-	 * 动态条件构建
-	 * @param searchMap
-	 * @return
-	 */
-	private Specification<Role> createSpecification(Map searchMap) {
-
-		return new Specification<Role>() {
-
-			@Override
-			public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				List<Predicate> predicateList = new ArrayList<Predicate>();
-                // 角色名称
-                if (searchMap.get("name")!=null && !"".equals(searchMap.get("name"))) {
-                	predicateList.add(cb.like(root.get("name").as(String.class), "%"+(String)searchMap.get("name")+"%"));
-                }
-                // 角色描述
-                if (searchMap.get("description")!=null && !"".equals(searchMap.get("description"))) {
-                	predicateList.add(cb.like(root.get("description").as(String.class), "%"+(String)searchMap.get("description")+"%"));
-                }
-				
-				return cb.and( predicateList.toArray(new Predicate[predicateList.size()]));
-
-			}
-		};
-
-	}
-
+    /***
+     * 多条件分页查询
+     * @param searchMap
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<Role> findPage(Map<String, Object> searchMap, int page, int size);
+    
 }

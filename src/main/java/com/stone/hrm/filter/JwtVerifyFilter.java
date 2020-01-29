@@ -6,9 +6,10 @@ import com.stone.hrm.common.entity.StatusCode;
 import com.stone.hrm.common.util.JwtUtils;
 import com.stone.hrm.config.RsaKeyProperties;
 import com.stone.hrm.pojo.User;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -97,7 +98,7 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
             try {
                 UsernamePasswordAuthenticationToken authResult = getAuthentication(request);
                 SecurityContextHolder.getContext().setAuthentication(authResult);
-            } catch (AuthenticationException e) {
+            } catch (AuthenticationException | ExpiredJwtException | SignatureException e) {
                 responseJson(response);
                 e.printStackTrace();
                 return;

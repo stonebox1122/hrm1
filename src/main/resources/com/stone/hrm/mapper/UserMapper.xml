@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stone.hrm.dao.UserMapper">
+
+    <select id="findByUsername" resultMap="UserRole">
+		SELECT
+            t1.id uid,
+            t1.username username,
+            t1.password password,
+            t3.id rid,
+            t3.name rolename,
+            t3.description roledesc
+        FROM
+            tb_user t1,
+            tb_user_role t2,
+            tb_role t3
+        WHERE
+            t1.id = t2.user_id
+        AND t2.role_id = t3.id
+        AND t1.username = #{username}
+        AND t1.status = 1
+	</select>
+
+    <resultMap id="UserRole" type="com.stone.hrm.pojo.User">
+        <result property="id" column="uid"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <!--复杂的属性需要单独处理 对象：association  集合：collection-->
+        <collection property="roles" ofType="com.stone.hrm.pojo.Role">
+            <result property="id" column="rid"/>
+            <result property="name" column="rolename"/>
+            <result property="description" column="roledesc"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectAllWithRole" resultMap="UserRole">
+        SELECT
+            t1.id uid,
+            t1.username username,
+            t1.password password,
+            t3.id rid,
+            t3.name rolename,
+            t3.description roledesc
+        FROM
+            tb_user t1,
+            tb_user_role t2,
+            tb_role t3
+        WHERE
+            t1.id = t2.user_id
+        AND t2.role_id = t3.id
+    </select>
+
+</mapper>

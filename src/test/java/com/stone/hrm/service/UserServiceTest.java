@@ -58,7 +58,7 @@ public class UserServiceTest {
         user.setStatus(1);
         user.setCreateTime(new Date());
 
-        user.getRoles().add(roleService.findByNameAndStatus("user", 1));
+        //user.getRoles().add(roleService.findByNameAndStatus("user", 1));
 
         userService.add(user);
     }
@@ -70,12 +70,12 @@ public class UserServiceTest {
     @Transactional
     @Commit
     public void testAdd2() {
-        User user = userService.findByUsernameAndStatus("cq00001", 1);
+        //User user = userService.findByUsernameAndStatus("cq00001", 1);
         List<Role> roles = new ArrayList<>();
-        roles.add(roleService.findByNameAndStatus("admin", 1));
-        roles.add(roleService.findByNameAndStatus("user", 1));
-        user.setRoles(roles);
-        userService.update(user);
+        //roles.add(roleService.findByNameAndStatus("admin", 1));
+        //roles.add(roleService.findByNameAndStatus("user", 1));
+        //user.setRoles(roles);
+        //userService.update(user);
     }
 
     /**
@@ -85,8 +85,8 @@ public class UserServiceTest {
     @Transactional
     @Commit
     public void testFind() {
-        User user = userService.findByUsernameAndStatus("cq00001", 1);
-        System.out.println(user);
+        //User user = userService.findByUsernameAndStatus("cq00001", 1);
+        //System.out.println(user);
     }
 
 }

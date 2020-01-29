@@ -1,68 +1,37 @@
 package com.stone.hrm.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-/**
- * user实体类
- * @author Administrator
- *
- */
-@Entity
 @Table(name="tb_user")
-@DynamicInsert
-@DynamicUpdate
+@Repository
 public class User implements Serializable, UserDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;//ID
+	@KeySql(useGeneratedKeys = true)
+	private Integer id;//用户ID
 	private String username;//员工工号
 	private String password;//登录密码
 	private Integer status;//状态：0为禁用，1为启用
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(insertable = false, updatable = false)
 	private java.util.Date createTime;//创建时间
-	/**
-	 * 注意：
-	 * 1. 如果@ManyToMany不设置fetch = FetchType.EAGER会出现以下报错
-	 * 	java.lang.RuntimeException: org.hibernate.LazyInitializationException: failed to lazily initialize a collection of role: com.stone.hrm.pojo.User.roles, could not initialize proxy - no Session
-	 * 	java.lang.IllegalStateException: getWriter() has already been called for this response
-	 *
-	 * 	2. 如果不设置@JsonIgnoreProperties(value = { "users" })，会出现以下报错
-	 * 	json序列化出错：com.stone.hrm.pojo.User@495a8cb0
-	 * 	com.fasterxml.jackson.databind.JsonMappingException: failed to lazily initialize a collection of role: com.stone.hrm.pojo.Role.users, could not initialize proxy - no Session
-	 *
-	 */
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "tb_user_role",
-			joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-			inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
-	)
-    @JsonIgnoreProperties(value = { "users" })
-	private List<Role> roles = new ArrayList<>();
+	@Column(insertable = false)
+	private java.util.Date updateTime;//更新时间
 
-	public User() {
-	}
+	private List<Role> roles;
 
-	public User(String username, String password, Integer status, Date createTime) {
-		this.username = username;
-		this.password = password;
-		this.status = status;
-		this.createTime = createTime;
-	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -74,7 +43,6 @@ public class User implements Serializable, UserDetails {
 	public String getUsername() {
 		return username;
 	}
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -101,15 +69,28 @@ public class User implements Serializable, UserDetails {
 		this.createTime = createTime;
 	}
 
-    public List<Role> getRoles() {
-        return roles;
-    }
+	public java.util.Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(java.util.Date updateTime) {
+		this.updateTime = updateTime;
+	}
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
+	public List<Role> getRoles() {
+		return roles;
+	}
 
-    @JsonIgnore
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	@JsonIgnore
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
+	}
+
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
@@ -132,11 +113,4 @@ public class User implements Serializable, UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
-	@JsonIgnore
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles;
-	}
-
 }

@@ -1,129 +1,72 @@
 package com.stone.hrm.service;
 
-import com.stone.hrm.dao.PermissionDao;
+import com.alibaba.fastjson.JSONArray;
 import com.stone.hrm.pojo.Permission;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
+import com.github.pagehelper.Page;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * permission服务层
- * 
- * @author Administrator
- *
- */
-@Service
-public class PermissionService {
+public interface PermissionService {
 
-	@Autowired
-	private PermissionDao permissionDao;
-	
-//	@Autowired
-//	private IdWorker idWorker;
+    /***
+     * 查询所有权限
+     * @return
+     */
+    List<Permission> findAll();
 
-	/**
-	 * 查询全部列表
-	 * @return
-	 */
-	public List<Permission> findAll() {
-		return permissionDao.findAll();
-	}
+    /**
+     * 根据ID查询
+     * @param id
+     * @return
+     */
+    Permission findById(Integer id);
 
-	
-	/**
-	 * 条件查询+分页
-	 * @param whereMap
-	 * @param page
-	 * @param size
-	 * @return
-	 */
-	public Page<Permission> findSearch(Map whereMap, int page, int size) {
-		Specification<Permission> specification = createSpecification(whereMap);
-		PageRequest pageRequest =  PageRequest.of(page-1, size);
-		return permissionDao.findAll(specification, pageRequest);
-	}
+    /***
+     * 新增权限
+     * @param permission
+     */
+    void add(Permission permission);
 
-	
-	/**
-	 * 条件查询
-	 * @param whereMap
-	 * @return
-	 */
-	public List<Permission> findSearch(Map whereMap) {
-		Specification<Permission> specification = createSpecification(whereMap);
-		return permissionDao.findAll(specification);
-	}
+    /***
+     * 修改权限数据
+     * @param permission
+     */
+    void update(Permission permission);
 
-	/**
-	 * 根据ID查询实体
-	 * @param id
-	 * @return
-	 */
-	public Permission findById(Integer id) {
-		return permissionDao.findById(id).get();
-	}
+    /***
+     * 删除权限
+     * @param id
+     */
+    void delete(Integer id);
 
-	/**
-	 * 增加
-	 * @param permission
-	 */
-	public void add(Permission permission) {
-		// permission.setId( idWorker.nextId()+"" ); 雪花分布式ID生成器
-		permissionDao.save(permission);
-	}
+    /***
+     * 多条件搜索权限方法
+     * @param searchMap
+     * @return
+     */
+    List<Permission> findList(Map<String, Object> searchMap);
 
-	/**
-	 * 修改
-	 * @param permission
-	 */
-	public void update(Permission permission) {
-		permissionDao.save(permission);
-	}
+    /***
+     * 分页查询
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<Permission> findPage(int page, int size);
 
-	/**
-	 * 删除
-	 * @param id
-	 */
-	public void deleteById(Integer id) {
-		permissionDao.deleteById(id);
-	}
+    /***
+     * 多条件分页查询
+     * @param searchMap
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<Permission> findPage(Map<String, Object> searchMap, int page, int size);
 
-	/**
-	 * 动态条件构建
-	 * @param searchMap
-	 * @return
-	 */
-	private Specification<Permission> createSpecification(Map searchMap) {
-
-		return new Specification<Permission>() {
-
-			@Override
-			public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				List<Predicate> predicateList = new ArrayList<Predicate>();
-                // 权限名称
-                if (searchMap.get("name")!=null && !"".equals(searchMap.get("name"))) {
-                	predicateList.add(cb.like(root.get("name").as(String.class), "%"+(String)searchMap.get("name")+"%"));
-                }
-                // 权限描述
-                if (searchMap.get("description")!=null && !"".equals(searchMap.get("description"))) {
-                	predicateList.add(cb.like(root.get("description").as(String.class), "%"+(String)searchMap.get("description")+"%"));
-                }
-				
-				return cb.and( predicateList.toArray(new Predicate[predicateList.size()]));
-
-			}
-		};
-
-	}
-
+    /**
+     * 查询所有权限返回树形数据
+     * @return
+     */
+    JSONArray findAllToTree();
 }

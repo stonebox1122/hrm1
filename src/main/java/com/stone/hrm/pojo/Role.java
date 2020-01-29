@@ -1,49 +1,24 @@
 package com.stone.hrm.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-/**
- * role实体类
- * @author Administrator
- *
- */
-@Entity
 @Table(name="tb_role")
 public class Role implements Serializable, GrantedAuthority {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;//ID
+	private Integer id;//角色ID
 	private String name;//角色名称
 	private String description;//角色描述
 	private Integer status;//状态：0为禁用，1为启用
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private java.util.Date createTime;//创建时间
-	/**
-	 * 注意：
-	 * 1. 此处@ManyToMany(mappedBy = "roles")中不要设置fetch = FetchType.EAGER，保持默认的Lazy，否则会再以role_id为条件来查询
-	 */
-	@ManyToMany(mappedBy = "roles")
-	private List<User> users = new ArrayList<>();
+	private java.util.Date updateTime;//更新时间
 
-	public Role() {
-	}
-
-	public Role(String name, String description, Integer status, Date createTime) {
-		this.name = name;
-		this.description = description;
-		this.status = status;
-		this.createTime = createTime;
-	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -79,12 +54,11 @@ public class Role implements Serializable, GrantedAuthority {
 		this.createTime = createTime;
 	}
 
-	public List<User> getUsers() {
-		return users;
+	public java.util.Date getUpdateTime() {
+		return updateTime;
 	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
+	public void setUpdateTime(java.util.Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	@JsonIgnore
@@ -92,5 +66,4 @@ public class Role implements Serializable, GrantedAuthority {
 	public String getAuthority() {
 		return name;
 	}
-
 }

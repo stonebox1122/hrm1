@@ -26,8 +26,8 @@ public class SwaggerConfig {
         // 添加请求参数，我们这里把token作为请求头部参数传入后端
         ParameterBuilder parameterBuilder = new ParameterBuilder();
         List<Parameter> parameters = new ArrayList<>();
-        parameterBuilder.name("Authorization").description("令牌").modelRef(new ModelRef("string")).parameterType("header")
-                .required(false).build();
+        parameterBuilder.name("Authorization").description("token").modelRef(new ModelRef("string")).parameterType("header")
+                .defaultValue("Bearer ").required(false).build();
         parameters.add(parameterBuilder.build());
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select().apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any()).build().globalOperationParameters(parameters);

@@ -1,36 +1,27 @@
 package com.stone.hrm.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
-/**
- * permission实体类
- * @author Administrator
- *
- */
-@Entity
 @Table(name="tb_permission")
-public class Permission implements Serializable{
+public class Permission implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;//ID
+	private Integer id;//权限ID
+	private Integer parentId;//父权限ID
 	private String name;//权限名称
-	private String description;//权限描述
+	private String css;//CSS样式
+	private String path;//访问路径
 	private Integer type;//权限类型 1为菜单 2为功能 3为API
+	private String permission;//具体权限
+	private Integer sort;//排序值
 	private Integer status;//状态：0为禁用，1为启用
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(insertable = false, updatable = false)
 	private java.util.Date createTime;//创建时间
-	@ManyToMany
-	@JoinTable(name = "tb_role_permission",
-			joinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")},
-			inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
-	)
-	private Set<Role> roles = new HashSet<>();
+	@Column(insertable = false)
+	private java.util.Date updateTime;//更新时间
 
 	
 	public Integer getId() {
@@ -40,6 +31,13 @@ public class Permission implements Serializable{
 		this.id = id;
 	}
 
+	public Integer getParentId() {
+		return parentId;
+	}
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -47,11 +45,18 @@ public class Permission implements Serializable{
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getCss() {
+		return css;
 	}
-	public void setDescription(String description) {
-		this.description = description;
+	public void setCss(String css) {
+		this.css = css;
+	}
+
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public Integer getType() {
@@ -59,6 +64,20 @@ public class Permission implements Serializable{
 	}
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public String getPermission() {
+		return permission;
+	}
+	public void setPermission(String permission) {
+		this.permission = permission;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 
 	public Integer getStatus() {
@@ -74,5 +93,14 @@ public class Permission implements Serializable{
 	public void setCreateTime(java.util.Date createTime) {
 		this.createTime = createTime;
 	}
+
+	public java.util.Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(java.util.Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+
 
 }

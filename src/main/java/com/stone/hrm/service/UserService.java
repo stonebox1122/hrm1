@@ -1,167 +1,84 @@
 package com.stone.hrm.service;
 
-import com.stone.hrm.dao.UserDao;
 import com.stone.hrm.pojo.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.github.pagehelper.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * user服务层
- * 
- * @author Administrator
- *
- */
-@Service
-@Transactional
-public class UserService implements UserDetailsService {
+public interface UserService extends UserDetailsService {
 
-	@Autowired
-	private UserDao userDao;
+    /***
+     * 查询所有用户
+     * @return
+     */
+    List<User> findAll();
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+    /**
+     * 根据ID查询
+     * @param id
+     * @return
+     */
+    User findById(Integer id);
 
-//	@Autowired
-//	private IdWorker idWorker;
+    /***
+     * 新增用户
+     * @param user
+     */
+    User add(User user);
 
-	/**
-	 * 根据工号查询正常状态的用户
-	 * @param username
-	 * @param status
-	 * @return
-	 */
-	public User findByUsernameAndStatus(String username, int status){
-		return userDao.findByUsernameAndStatus(username, status);
-	}
+    /***
+     * 修改用户数据
+     * @param user
+     */
+    void update(User user);
 
-	/**
-	 * 查询全部列表
-	 * @return
-	 */
-	public List<User> findAll() {
-		return userDao.findAll();
-	}
+    /***
+     * 删除用户
+     * @param id
+     */
+    void delete(Integer id);
 
-	
-	/**
-	 * 条件查询+分页
-	 * @param whereMap
-	 * @param page
-	 * @param size
-	 * @return
-	 */
-	public Page<User> findSearch(Map whereMap, int page, int size) {
-		Specification<User> specification = createSpecification(whereMap);
-		PageRequest pageRequest =  PageRequest.of(page-1, size);
-		return userDao.findAll(specification, pageRequest);
-	}
+    /***
+     * 多条件搜索用户方法
+     * @param searchMap
+     * @return
+     */
+    List<User> findList(Map<String, Object> searchMap);
 
-	
-	/**
-	 * 条件查询
-	 * @param whereMap
-	 * @return
-	 */
-	public List<User> findSearch(Map whereMap) {
-		Specification<User> specification = createSpecification(whereMap);
-		return userDao.findAll(specification);
-	}
+    /***
+     * 分页查询
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<User> findPage(int page, int size);
 
-	/**
-	 * 根据ID查询实体
-	 * @param id
-	 * @return
-	 */
-	public User findById(Integer id) {
-		return userDao.findById(id).get();
-	}
+    /***
+     * 多条件分页查询
+     * @param searchMap
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<User> findPage(Map<String, Object> searchMap, int page, int size);
 
-	/**
-	 * 增加
-	 * @param user
-	 */
-	public User add(User user) {
-		// user.setId( idWorker.nextId()+"" ); 雪花分布式ID生成器
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		return userDao.save(user);
-	}
+    /**
+     * 多条件分页查询，包含角色
+     * @param searchMap
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<User> findAllPage(Map<String, Object> searchMap, int page, int size);
 
-	/**
-	 * 修改
-	 * @param user
-	 */
-	public void update(User user) {
-		userDao.save(user);
-	}
+    /**
+     * 修改用户状态
+     * @param status
+     * @param id
+     * @return
+     */
+    User updateStatusById(Integer status, Integer id);
 
-	/**
-	 * 删除
-	 * @param id
-	 */
-	public void deleteById(Integer id) {
-		userDao.deleteById(id);
-	}
-
-	/**
-	 * 动态条件构建
-	 * @param searchMap
-	 * @return
-	 */
-	private Specification<User> createSpecification(Map searchMap) {
-
-		if (searchMap == null){
-			return null;
-		}
-
-		return new Specification<User>() {
-
-			@Override
-			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				List<Predicate> predicateList = new ArrayList<Predicate>();
-                // 员工工号
-                if (searchMap.get("username")!=null && !"".equals(searchMap.get("username"))) {
-                	predicateList.add(cb.like(root.get("username").as(String.class), "%"+(String)searchMap.get("username")+"%"));
-                }
-                // 登录密码
-                if (searchMap.get("password")!=null && !"".equals(searchMap.get("password"))) {
-                	predicateList.add(cb.like(root.get("password").as(String.class), "%"+(String)searchMap.get("password")+"%"));
-                }
-				
-				return cb.and( predicateList.toArray(new Predicate[predicateList.size()]));
-
-			}
-		};
-
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-		return userDao.findByUsernameAndStatus(s, 1);
-	}
-
-    public User updateStatusById(int status, int id) {
-		int userId = userDao.updateStatusById(status, id);
-		return findById(id);
-    }
-
-    public User insertRoleById(int userId, int roleId) {
-		userDao.insertRoleById(userId, roleId);
-		return findById(userId);
-	}
 }

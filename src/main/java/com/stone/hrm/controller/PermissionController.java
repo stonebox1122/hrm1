@@ -1,108 +1,125 @@
 package com.stone.hrm.controller;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSONArray;
 import com.stone.hrm.common.entity.PageResult;
 import com.stone.hrm.common.entity.Result;
 import com.stone.hrm.common.entity.StatusCode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.stone.hrm.pojo.Permission;
 import com.stone.hrm.service.PermissionService;
+import com.stone.hrm.pojo.Permission;
+import com.github.pagehelper.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Map;
 
-/**
- * permission控制器层
- * @author Administrator
- *
- */
+@Api(tags = "系统管理：权限管理")
 @RestController
 @CrossOrigin
 @RequestMapping("/permission")
 public class PermissionController {
 
-	@Autowired
-	private PermissionService permissionService;
-	
-	
-	/**
-	 * 查询全部数据
-	 * @return
-	 */
-	@RequestMapping(method= RequestMethod.GET)
-	public Result findAll(){
-		return new Result(true, StatusCode.OK,"查询成功",permissionService.findAll());
-	}
-	
-	/**
-	 * 根据ID查询
-	 * @param id ID
-	 * @return
-	 */
-	@RequestMapping(value="/{id}",method= RequestMethod.GET)
-	public Result findById(@PathVariable Integer id){
-		return new Result(true,StatusCode.OK,"查询成功",permissionService.findById(id));
-	}
+
+    @Autowired
+    private PermissionService permissionService;
+
+    /**
+     * 查询全部数据
+     * @return
+     */
+    @ApiOperation("查询所有权限")
+    @GetMapping
+    public Result findAll(){
+        List<Permission> permissionList = permissionService.findAll();
+        return new Result(true, StatusCode.OK,"查询成功",permissionList) ;
+    }
+
+    @ApiOperation("查询所有权限返回树形数据")
+    @GetMapping
+    public Result findAllToTree(){
+        JSONArray permissionTree = permissionService.findAllToTree();
+        return new Result(true, StatusCode.OK,"查询成功",permissionTree) ;
+    }
+
+    /***
+     * 根据ID查询数据
+     * @param id
+     * @return
+     */
+    @ApiOperation("查询指定权限")
+    @GetMapping("/{id}")
+    public Result findById(@PathVariable Integer id){
+        Permission permission = permissionService.findById(id);
+        return new Result(true,StatusCode.OK,"查询成功",permission);
+    }
 
 
-	/**
-	 * 分页+多条件查询
-	 * @param searchMap 查询条件封装
-	 * @param page 页码
-	 * @param size 页大小
-	 * @return 分页结果
-	 */
-	@RequestMapping(value="/search/{page}/{size}",method=RequestMethod.POST)
-	public Result findSearch(@RequestBody Map searchMap , @PathVariable int page, @PathVariable int size){
-		Page<Permission> pageList = permissionService.findSearch(searchMap, page, size);
-		return  new Result(true,StatusCode.OK,"查询成功",  new PageResult<Permission>(pageList.getTotalElements(), pageList.getContent()) );
-	}
+    /***
+     * 新增数据
+     * @param permission
+     * @return
+     */
+    @ApiOperation("添加权限")
+    @PostMapping
+    public Result add(@RequestBody Permission permission){
+        permissionService.add(permission);
+        return new Result(true,StatusCode.OK,"添加成功");
+    }
 
-	/**
-     * 根据条件查询
+
+    /***
+     * 修改数据
+     * @param permission
+     * @param id
+     * @return
+     */
+    @ApiOperation("修改权限")
+    @PutMapping(value="/{id}")
+    public Result update(@RequestBody Permission permission,@PathVariable Integer id){
+        permission.setId(id);
+        permissionService.update(permission);
+        return new Result(true,StatusCode.OK,"修改成功");
+    }
+
+
+    /***
+     * 根据ID删除数据
+     * @param id
+     * @return
+     */
+    @ApiOperation("删除权限")
+    @DeleteMapping(value = "/{id}" )
+    public Result delete(@PathVariable Integer id){
+        permissionService.delete(id);
+        return new Result(true,StatusCode.OK,"删除成功");
+    }
+
+    /***
+     * 多条件搜索数据
      * @param searchMap
      * @return
      */
-    @RequestMapping(value="/search",method = RequestMethod.POST)
-    public Result findSearch( @RequestBody Map searchMap){
-        return new Result(true,StatusCode.OK,"查询成功",permissionService.findSearch(searchMap));
+    @ApiOperation("根据条件查询权限")
+    @GetMapping(value = "/search" )
+    public Result findList(@RequestParam Map searchMap){
+        List<Permission> list = permissionService.findList(searchMap);
+        return new Result(true,StatusCode.OK,"查询成功",list);
     }
-	
-	/**
-	 * 增加
-	 * @param permission
-	 */
-	@RequestMapping(method=RequestMethod.POST)
-	public Result add(@RequestBody Permission permission  ){
-		permissionService.add(permission);
-		return new Result(true,StatusCode.OK,"增加成功");
-	}
-	
-	/**
-	 * 修改
-	 * @param permission
-	 */
-	@RequestMapping(value="/{id}",method= RequestMethod.PUT)
-	public Result update(@RequestBody Permission permission, @PathVariable Integer id ){
-		permission.setId(id);
-		permissionService.update(permission);
-		return new Result(true,StatusCode.OK,"修改成功");
-	}
-	
-	/**
-	 * 删除
-	 * @param id
-	 */
-	@RequestMapping(value="/{id}",method= RequestMethod.DELETE)
-	public Result delete(@PathVariable Integer id){
-		permissionService.deleteById(id);
-		return new Result(true,StatusCode.OK,"删除成功");
-	}
-	
+
+
+    /***
+     * 分页搜索实现
+     * @param searchMap
+     * @param page
+     * @param size
+     * @return
+     */
+    @ApiOperation("根据条件查询权限并分页显示")
+    @GetMapping(value = "/search/{page}/{size}" )
+    public Result findPage(@RequestParam Map searchMap, @PathVariable  int page, @PathVariable  int size){
+        Page<Permission> pageList = permissionService.findPage(searchMap, page, size);
+        PageResult pageResult=new PageResult(pageList.getTotal(),pageList.getResult());
+        return new Result(true,StatusCode.OK,"查询成功",pageResult);
+    }
+
 }

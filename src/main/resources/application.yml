@@ -7,22 +7,46 @@ spring:
     name: hrm
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/hrm?characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/hrm4?characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
-  jpa:
-    database: mysql
-    show-sql: true
-    properties:
-      hibernate.format_sql: true
-    open-in-view: true
+    platform: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 1
+    minIdle: 3
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Shanghai
-logging:
-  level:
-    org.hibernate.type.descriptor.sql.BasicBinder: trace
+  devtools:
+    restart:
+      #需要实时更新的目录
+      additional-paths: resources/**
+
+mybatis:
+  type-aliases-package: com.stone.hrm.pojo
+  mapper-locations: classpath:/com/stone/hrm/mapper/*.xml
+  configuration:
+    mapUnderscoreToCamelCase: true
+
 rsa:
   key:
     publicKeyFile: D:\auth_key\rsa_key.pub
     privateKeyFile: D:\auth_key\rsa_key
+
+logging:
+  level:
+    com.stone.hrm.dao: debug
