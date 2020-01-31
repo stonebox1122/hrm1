@@ -25,6 +25,9 @@
         <result property="id" column="uid"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
         <!--复杂的属性需要单独处理 对象：association  集合：collection-->
         <collection property="roles" ofType="com.stone.hrm.pojo.Role">
             <result property="id" column="rid"/>
@@ -38,16 +41,18 @@
             t1.id uid,
             t1.username username,
             t1.password password,
+            t1.status status,
+            t1.create_time create_time,
+            t1.update_time update_time,
             t3.id rid,
             t3.name rolename,
             t3.description roledesc
         FROM
-            tb_user t1,
-            tb_user_role t2,
-            tb_role t3
-        WHERE
-            t1.id = t2.user_id
-        AND t2.role_id = t3.id
+            tb_user t1
+                LEFT JOIN
+            tb_user_role t2 ON t1.id = t2.user_id
+                LEFT JOIN
+            tb_role t3 ON t2.role_id = t3.id
     </select>
 
 </mapper>

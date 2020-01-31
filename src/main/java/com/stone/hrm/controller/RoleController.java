@@ -5,10 +5,14 @@ import com.stone.hrm.common.entity.StatusCode;
 import com.stone.hrm.service.RoleService;
 import com.stone.hrm.pojo.Role;
 import com.github.pagehelper.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+
+@Api(tags = "系统管理：角色管理")
 @RestController
 @CrossOrigin
 @RequestMapping("/role")
@@ -22,6 +26,7 @@ public class RoleController {
      * 查询全部数据
      * @return
      */
+    @ApiOperation("查询所有角色")
     @GetMapping
     public Result findAll(){
         List<Role> roleList = roleService.findAll();
@@ -33,6 +38,7 @@ public class RoleController {
      * @param id
      * @return
      */
+    @ApiOperation("查询指定角色")
     @GetMapping("/{id}")
     public Result findById(@PathVariable Integer id){
         Role role = roleService.findById(id);
@@ -45,6 +51,7 @@ public class RoleController {
      * @param role
      * @return
      */
+    @ApiOperation("添加角色")
     @PostMapping
     public Result add(@RequestBody Role role){
         roleService.add(role);
@@ -58,6 +65,7 @@ public class RoleController {
      * @param id
      * @return
      */
+    @ApiOperation("修改角色")
     @PutMapping(value="/{id}")
     public Result update(@RequestBody Role role,@PathVariable Integer id){
         role.setId(id);
@@ -71,6 +79,7 @@ public class RoleController {
      * @param id
      * @return
      */
+    @ApiOperation("删除角色")
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Integer id){
         roleService.delete(id);
@@ -82,6 +91,7 @@ public class RoleController {
      * @param searchMap
      * @return
      */
+    @ApiOperation("根据条件查询角色")
     @GetMapping(value = "/search" )
     public Result findList(@RequestParam Map searchMap){
         List<Role> list = roleService.findList(searchMap);
@@ -96,6 +106,7 @@ public class RoleController {
      * @param size
      * @return
      */
+    @ApiOperation("根据条件查询角色并分页显示")
     @GetMapping(value = "/search/{page}/{size}" )
     public Result findPage(@RequestParam Map searchMap, @PathVariable  int page, @PathVariable  int size){
         Page<Role> pageList = roleService.findPage(searchMap, page, size);

@@ -5,10 +5,14 @@ import com.stone.hrm.common.entity.StatusCode;
 import com.stone.hrm.service.UserRoleService;
 import com.stone.hrm.pojo.UserRole;
 import com.github.pagehelper.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+
+@Api(tags = "系统管理：用户角色关联管理")
 @RestController
 @CrossOrigin
 @RequestMapping("/userRole")
@@ -22,6 +26,7 @@ public class UserRoleController {
      * 查询全部数据
      * @return
      */
+    @ApiOperation("查询所有用户角色关联")
     @GetMapping
     public Result findAll(){
         List<UserRole> userRoleList = userRoleService.findAll();
@@ -33,6 +38,7 @@ public class UserRoleController {
      * @param id
      * @return
      */
+    @ApiOperation("查询指定用户角色关联")
     @GetMapping("/{id}")
     public Result findById(@PathVariable Integer id){
         UserRole userRole = userRoleService.findById(id);
@@ -45,6 +51,7 @@ public class UserRoleController {
      * @param userRole
      * @return
      */
+    @ApiOperation("添加用户角色关联")
     @PostMapping
     public Result add(@RequestBody UserRole userRole){
         userRoleService.add(userRole);
@@ -58,6 +65,7 @@ public class UserRoleController {
      * @param id
      * @return
      */
+    @ApiOperation("修改用户角色关联")
     @PutMapping(value="/{id}")
     public Result update(@RequestBody UserRole userRole,@PathVariable Integer id){
         userRole.setId(id);
@@ -71,6 +79,7 @@ public class UserRoleController {
      * @param id
      * @return
      */
+    @ApiOperation("删除用户角色关联")
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Integer id){
         userRoleService.delete(id);
@@ -82,6 +91,7 @@ public class UserRoleController {
      * @param searchMap
      * @return
      */
+    @ApiOperation("根据条件查询用户角色关联")
     @GetMapping(value = "/search" )
     public Result findList(@RequestParam Map searchMap){
         List<UserRole> list = userRoleService.findList(searchMap);
@@ -96,6 +106,7 @@ public class UserRoleController {
      * @param size
      * @return
      */
+    @ApiOperation("根据条件查询用户角色关联并分页显示")
     @GetMapping(value = "/search/{page}/{size}" )
     public Result findPage(@RequestParam Map searchMap, @PathVariable  int page, @PathVariable  int size){
         Page<UserRole> pageList = userRoleService.findPage(searchMap, page, size);

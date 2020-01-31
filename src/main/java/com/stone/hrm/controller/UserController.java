@@ -31,9 +31,9 @@ public class UserController {
      */
     @ApiOperation("查询所有用户并分页显示")
     @GetMapping
-    public Result findAll(@RequestBody Map searchMap) {
-        int page = (int) searchMap.get("page");
-        int size = (int) searchMap.get("size");
+    public Result findAll(@RequestParam Map searchMap) {
+        int page = Integer.valueOf((String) searchMap.get("pagenum"));
+        int size = Integer.valueOf((String) searchMap.get("pagesize"));
         Page<User> pageList = userService.findAllPage(null, page, size);
         PageResult pageResult = new PageResult(pageList.getTotal(), pageList.getResult());
         return new Result(true, StatusCode.OK, "查询成功", pageResult);

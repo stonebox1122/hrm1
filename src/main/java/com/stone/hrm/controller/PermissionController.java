@@ -35,10 +35,10 @@ public class PermissionController {
     }
 
     @ApiOperation("查询所有权限返回树形数据")
-    @GetMapping
+    @GetMapping("/tree")
     public Result findAllToTree(){
         JSONArray permissionTree = permissionService.findAllToTree();
-        return new Result(true, StatusCode.OK,"查询成功",permissionTree) ;
+        return new Result(true, StatusCode.OK,"查询成功",permissionTree);
     }
 
     /***

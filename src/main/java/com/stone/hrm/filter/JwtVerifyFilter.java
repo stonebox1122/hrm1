@@ -58,7 +58,7 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter {
             ServletOutputStream out = response.getOutputStream();
             Map resultMap = new HashMap();
             resultMap.put("flag", "false");
-            resultMap.put("code", StatusCode.FORBIDDEN);
+            resultMap.put("status", StatusCode.FORBIDDEN);
             resultMap.put("message", "请登录！");
             out.write(new ObjectMapper().writeValueAsString(resultMap).getBytes());
             out.flush();

@@ -54,7 +54,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 ServletOutputStream out = response.getOutputStream();
                 Map resultMap = new HashMap();
                 resultMap.put("flag", "false");
-                resultMap.put("code", StatusCode.UNAUTHORIZED);
+                resultMap.put("status", StatusCode.UNAUTHORIZED);
                 resultMap.put("message", "用户名或密码错误！");
                 out.write(new ObjectMapper().writeValueAsString(resultMap).getBytes());
                 out.flush();
@@ -94,7 +94,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             ServletOutputStream out = response.getOutputStream();
             Map resultMap = new HashMap();
             resultMap.put("flag", "true");
-            resultMap.put("code", StatusCode.OK);
+            resultMap.put("status", StatusCode.OK);
             resultMap.put("message", "认证通过！");
             Map resultDataMap = new HashMap();
             resultDataMap.put("user", user);

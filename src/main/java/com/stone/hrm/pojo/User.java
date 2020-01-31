@@ -23,6 +23,7 @@ public class User implements Serializable, UserDetails {
 	private Integer id;//用户ID
 	private String username;//员工工号
 	private String password;//登录密码
+	@Column(insertable = false)
 	private Integer status;//状态：0为禁用，1为启用
 	@Column(insertable = false, updatable = false)
 	private java.util.Date createTime;//创建时间

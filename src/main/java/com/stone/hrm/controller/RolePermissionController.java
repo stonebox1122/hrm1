@@ -5,10 +5,14 @@ import com.stone.hrm.common.entity.StatusCode;
 import com.stone.hrm.service.RolePermissionService;
 import com.stone.hrm.pojo.RolePermission;
 import com.github.pagehelper.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+
+@Api(tags = "系统管理：角色权限关联关联管理")
 @RestController
 @CrossOrigin
 @RequestMapping("/rolePermission")
@@ -22,6 +26,7 @@ public class RolePermissionController {
      * 查询全部数据
      * @return
      */
+    @ApiOperation("查询所有角色权限关联关联")
     @GetMapping
     public Result findAll(){
         List<RolePermission> rolePermissionList = rolePermissionService.findAll();
@@ -33,6 +38,7 @@ public class RolePermissionController {
      * @param id
      * @return
      */
+    @ApiOperation("查询指定角色权限关联关联")
     @GetMapping("/{id}")
     public Result findById(@PathVariable Integer id){
         RolePermission rolePermission = rolePermissionService.findById(id);
@@ -45,6 +51,7 @@ public class RolePermissionController {
      * @param rolePermission
      * @return
      */
+    @ApiOperation("添加角色权限关联关联")
     @PostMapping
     public Result add(@RequestBody RolePermission rolePermission){
         rolePermissionService.add(rolePermission);
@@ -58,6 +65,7 @@ public class RolePermissionController {
      * @param id
      * @return
      */
+    @ApiOperation("修改角色权限关联关联")
     @PutMapping(value="/{id}")
     public Result update(@RequestBody RolePermission rolePermission,@PathVariable Integer id){
         rolePermission.setId(id);
@@ -71,6 +79,7 @@ public class RolePermissionController {
      * @param id
      * @return
      */
+    @ApiOperation("删除角色权限关联关联")
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Integer id){
         rolePermissionService.delete(id);
@@ -82,6 +91,7 @@ public class RolePermissionController {
      * @param searchMap
      * @return
      */
+    @ApiOperation("根据条件查询角色权限关联关联")
     @GetMapping(value = "/search" )
     public Result findList(@RequestParam Map searchMap){
         List<RolePermission> list = rolePermissionService.findList(searchMap);
@@ -96,6 +106,7 @@ public class RolePermissionController {
      * @param size
      * @return
      */
+    @ApiOperation("根据条件查询角色权限关联关联并分页显示")
     @GetMapping(value = "/search/{page}/{size}" )
     public Result findPage(@RequestParam Map searchMap, @PathVariable  int page, @PathVariable  int size){
         Page<RolePermission> pageList = rolePermissionService.findPage(searchMap, page, size);
