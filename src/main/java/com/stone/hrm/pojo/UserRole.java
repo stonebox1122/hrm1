@@ -1,5 +1,6 @@
 package com.stone.hrm.pojo;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -11,7 +12,9 @@ public class UserRole implements Serializable {
 	private Integer id;//ID
 	private Integer userId;//用户ID
 	private Integer roleId;//角色ID
+	@Column(insertable = false, updatable = false)
 	private java.util.Date createTime;//创建时间
+	@Column(insertable = false)
 	private java.util.Date updateTime;//更新时间
 
 	

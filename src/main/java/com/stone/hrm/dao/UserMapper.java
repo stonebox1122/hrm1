@@ -15,6 +15,9 @@ public interface UserMapper extends Mapper<User> {
 
     List<User> selectAllWithRole();
 
-    @Update(value = "update tb_user set status=#{status} where id=#{id}")
+    @Update(value = "update tb_user set status=#{status},update_time=now() where id=#{id}")
     void updateStatusById(@Param("status") Integer status, @Param("id") Integer id);
+
+    @Update(value = "update tb_user_role set role_id=#{rid},update_time=now() where user_id=#{id}")
+    void updateRole(@Param("id") Integer id, @Param("rid") Integer rid);
 }

@@ -42,7 +42,7 @@ public class UserServiceTest {
 
         user.getRoles().add(role);
 
-        userService.add(user);
+        //userService.add(user);
         roleService.add(role);
     }
 
@@ -60,7 +60,7 @@ public class UserServiceTest {
 
         //user.getRoles().add(roleService.findByNameAndStatus("user", 1));
 
-        userService.add(user);
+        //userService.add(user);
     }
 
     /**

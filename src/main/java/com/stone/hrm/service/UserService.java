@@ -1,5 +1,6 @@
 package com.stone.hrm.service;
 
+import com.stone.hrm.dto.UserDto;
 import com.stone.hrm.pojo.User;
 import com.github.pagehelper.Page;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,7 +27,7 @@ public interface UserService extends UserDetailsService {
      * 新增用户
      * @param user
      */
-    User add(User user);
+    User add(UserDto user);
 
     /***
      * 修改用户数据
@@ -80,5 +81,7 @@ public interface UserService extends UserDetailsService {
      * @return
      */
     User updateStatusById(Integer status, Integer id);
+
+    void updateRole(Integer id, Integer rid);
 
 }

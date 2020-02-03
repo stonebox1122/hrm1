@@ -1,11 +1,12 @@
 package com.stone.hrm.controller;
 
+import com.github.pagehelper.Page;
 import com.stone.hrm.common.entity.PageResult;
 import com.stone.hrm.common.entity.Result;
 import com.stone.hrm.common.entity.StatusCode;
-import com.stone.hrm.service.UserService;
+import com.stone.hrm.dto.UserDto;
 import com.stone.hrm.pojo.User;
-import com.github.pagehelper.Page;
+import com.stone.hrm.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,11 @@ public class UserController {
     @ApiOperation("查询所有用户并分页显示")
     @GetMapping
     public Result findAll(@RequestParam Map searchMap) {
-        int page = Integer.valueOf((String) searchMap.get("pagenum"));
-        int size = Integer.valueOf((String) searchMap.get("pagesize"));
-        Page<User> pageList = userService.findAllPage(null, page, size);
-        PageResult pageResult = new PageResult(pageList.getTotal(), pageList.getResult());
-        return new Result(true, StatusCode.OK, "查询成功", pageResult);
+            int page = Integer.valueOf((String) searchMap.get("pagenum"));
+            int size = Integer.valueOf((String) searchMap.get("pagesize"));
+            Page<User> pageList = userService.findAllPage(null, page, size);
+            PageResult pageResult = new PageResult(pageList.getTotal(), pageList.getResult());
+            return new Result(true, StatusCode.OK, "查询成功", pageResult);
 //        List<User> userList = userService.findAll();
 //        return new Result(true, StatusCode.OK,"查询成功",userList) ;
     }
@@ -61,7 +62,7 @@ public class UserController {
      */
     @ApiOperation("添加用户")
     @PostMapping
-    public Result add(@RequestBody User user) {
+    public Result add(@RequestBody UserDto user) {
         User addUser = userService.add(user);
         return new Result(true, StatusCode.OK, "添加成功", addUser);
     }
@@ -73,7 +74,7 @@ public class UserController {
      * @param id
      * @return
      */
-    @ApiOperation("修改用户")
+    @ApiOperation("修改用户密码")
     @PutMapping(value = "/{id}")
     public Result update(@RequestBody User user, @PathVariable Integer id) {
         user.setId(id);
@@ -130,6 +131,17 @@ public class UserController {
     @PutMapping(value = "/{id}/status/{status}")
     public Result updateStatus(@PathVariable Integer id, @PathVariable Integer status) {
         return new Result(true, StatusCode.OK, "修改成功", userService.updateStatusById(status, id));
+    }
+
+    /**
+     * 修改用户角色
+     *
+     */
+    @ApiOperation("修改用户角色")
+    @PutMapping(value = "/{id}/role/{rid}")
+    public Result updateRole(@PathVariable Integer id, @PathVariable Integer rid) {
+        userService.updateRole(id, rid);
+        return new Result(true, StatusCode.OK, "修改成功");
     }
 
 }

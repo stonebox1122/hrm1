@@ -2,8 +2,12 @@ package com.stone.hrm.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.stone.hrm.dao.RoleMapper;
 import com.stone.hrm.dao.UserMapper;
+import com.stone.hrm.dao.UserRoleMapper;
+import com.stone.hrm.dto.UserDto;
 import com.stone.hrm.pojo.User;
+import com.stone.hrm.pojo.UserRole;
 import com.stone.hrm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +27,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RoleMapper roleMapper;
+
+    @Autowired
+    private UserRoleMapper userRoleMapper;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -54,9 +65,13 @@ public class UserServiceImpl implements UserService {
      * @param user
      */
     @Override
-    public User add(User user) {
+    public User add(UserDto user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userMapper.insert(user);
+        UserRole userRole = new UserRole();
+        userRole.setUserId(user.getId());
+        userRole.setRoleId(user.getRoleId());
+        userRoleMapper.insert(userRole);
         return findById(user.getId());
     }
 
@@ -68,6 +83,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void update(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setUpdateTime(Calendar.getInstance().getTime());
         userMapper.updateByPrimaryKey(user);
     }
 
@@ -133,6 +150,11 @@ public class UserServiceImpl implements UserService {
     public User updateStatusById(Integer status, Integer id) {
         userMapper.updateStatusById(status, id);
         return findById(id);
+    }
+
+    @Override
+    public void updateRole(Integer id, Integer rid) {
+        userMapper.updateRole(id, rid);
     }
 
     /**
