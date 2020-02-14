@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Update;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 public interface UserMapper extends Mapper<User> {
@@ -20,4 +21,6 @@ public interface UserMapper extends Mapper<User> {
 
     @Update(value = "update tb_user_role set role_id=#{rid},update_time=now() where user_id=#{id}")
     void updateRole(@Param("id") Integer id, @Param("rid") Integer rid);
+
+    List<User> findConditionPage(@Param("username")String username, @Param("roleId")int roleId, @Param("status")int status, @Param("beginCreateTime")Date beginCreateTime, @Param("endCreateTime")Date endCreateTime);
 }

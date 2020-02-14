@@ -118,7 +118,7 @@ public class UserController {
     @ApiOperation("根据条件查询用户并分页显示")
     @GetMapping(value = "/search/{page}/{size}")
     public Result findPage(@RequestParam Map searchMap, @PathVariable int page, @PathVariable int size) {
-        Page<User> pageList = userService.findPage(searchMap, page, size);
+        Page<User> pageList = userService.findConditionPage(searchMap, page, size);
         PageResult pageResult = new PageResult(pageList.getTotal(), pageList.getResult());
         return new Result(true, StatusCode.OK, "查询成功", pageResult);
     }

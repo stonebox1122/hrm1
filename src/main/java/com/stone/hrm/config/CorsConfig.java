@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * CorsConfig:
- *
+ * 参考：https://github.com/elunez/eladmin
  * @author Stone
  * @version V1.0
  * @date 2020/1/30

@@ -1,5 +1,6 @@
 package com.stone.hrm.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.stone.hrm.dao.RoleMapper;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -155,6 +157,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateRole(Integer id, Integer rid) {
         userMapper.updateRole(id, rid);
+    }
+
+    @Override
+    public Page<User> findConditionPage(Map searchMap, int page, int size) {
+        PageHelper.startPage(page, size);
+        String username = (String) searchMap.get("username");
+        int roleId = Integer.valueOf((String) searchMap.get("roleId"));
+        int status = Integer.valueOf((String) searchMap.get("status"));
+        Date beginCreateTime = DateUtil.parse((String) searchMap.get("beginCreateTime"));
+        Date endCreateTime = DateUtil.parse((String) searchMap.get("endCreateTime"));
+        return (Page<User>) userMapper.findConditionPage(username, roleId, status, beginCreateTime, endCreateTime);
     }
 
     /**

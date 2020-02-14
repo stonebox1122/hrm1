@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * UserDto:
  *
@@ -17,4 +21,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDto extends User {
     private Integer roleId;
+    private List<Date> searchTime = new ArrayList<>(2);
 }
