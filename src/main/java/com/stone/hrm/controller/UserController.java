@@ -110,15 +110,15 @@ public class UserController {
 
     /***
      * 分页搜索实现
-     * @param searchMap
+     * @param userDto
      * @param page
      * @param size
      * @return
      */
     @ApiOperation("根据条件查询用户并分页显示")
     @GetMapping(value = "/search/{page}/{size}")
-    public Result findPage(@RequestParam Map searchMap, @PathVariable int page, @PathVariable int size) {
-        Page<User> pageList = userService.findConditionPage(searchMap, page, size);
+    public Result findPage(UserDto userDto, @PathVariable int page, @PathVariable int size) {
+        Page<User> pageList = userService.findConditionPage(userDto, page, size);
         PageResult pageResult = new PageResult(pageList.getTotal(), pageList.getResult());
         return new Result(true, StatusCode.OK, "查询成功", pageResult);
     }

@@ -84,5 +84,5 @@ public interface UserService extends UserDetailsService {
 
     void updateRole(Integer id, Integer rid);
 
-    Page<User> findConditionPage(Map searchMap, int page, int size);
+    Page<User> findConditionPage(UserDto userDto, int page, int size);
 }

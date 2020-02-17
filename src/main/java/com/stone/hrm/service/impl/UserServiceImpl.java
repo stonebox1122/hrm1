@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.stone.hrm.common.util.SecurityUtils.getUsername;
+
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -160,13 +162,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findConditionPage(Map searchMap, int page, int size) {
+    public Page<User> findConditionPage(UserDto userDto, int page, int size) {
         PageHelper.startPage(page, size);
-        String username = (String) searchMap.get("username");
-        int roleId = Integer.valueOf((String) searchMap.get("roleId"));
-        int status = Integer.valueOf((String) searchMap.get("status"));
-        Date beginCreateTime = DateUtil.parse((String) searchMap.get("beginCreateTime"));
-        Date endCreateTime = DateUtil.parse((String) searchMap.get("endCreateTime"));
+        String username = userDto.getUsername();
+        Integer roleId = userDto.getRoleId();
+        Integer status = userDto.getStatus();
+        Date beginCreateTime = userDto.getBeginCreateTime();
+        Date endCreateTime = userDto.getEndCreateTime();
+//        String username = (String) searchMap.get("username");
+//        int roleId = Integer.valueOf((String) searchMap.get("roleId"));
+//        int status = Integer.valueOf((String) searchMap.get("status"));
+//        Date beginCreateTime = DateUtil.parse((String) searchMap.get("beginCreateTime"));
+//        Date endCreateTime = DateUtil.parse((String) searchMap.get("endCreateTime"));
         return (Page<User>) userMapper.findConditionPage(username, roleId, status, beginCreateTime, endCreateTime);
     }
 

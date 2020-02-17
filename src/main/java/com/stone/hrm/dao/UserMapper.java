@@ -22,5 +22,5 @@ public interface UserMapper extends Mapper<User> {
     @Update(value = "update tb_user_role set role_id=#{rid},update_time=now() where user_id=#{id}")
     void updateRole(@Param("id") Integer id, @Param("rid") Integer rid);
 
-    List<User> findConditionPage(@Param("username")String username, @Param("roleId")int roleId, @Param("status")int status, @Param("beginCreateTime")Date beginCreateTime, @Param("endCreateTime")Date endCreateTime);
+    List<User> findConditionPage(@Param("username")String username, @Param("roleId")Integer roleId, @Param("status")Integer status, @Param("beginCreateTime")Date beginCreateTime, @Param("endCreateTime")Date endCreateTime);
 }
