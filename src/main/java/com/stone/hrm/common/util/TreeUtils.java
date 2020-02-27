@@ -28,9 +28,9 @@ public class TreeUtils {
                 JSONObject parent = (JSONObject) JSONObject.parse(string);
                 array.add(parent);
                 if (permissionsAll.stream().filter(p -> p.getParentId().equals(per.getId())).findAny() != null) {
-                    JSONArray child = new JSONArray();
-                    parent.put("child", child);
-                    setPermissionsTree(per.getId(), permissionsAll, child);
+                    JSONArray children = new JSONArray();
+                    parent.put("children", children);
+                    setPermissionsTree(per.getId(), permissionsAll, children);
                 }
             }
         }

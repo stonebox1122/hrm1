@@ -14,7 +14,7 @@ public class Permission implements Serializable {
 	private String name;//权限名称
 	private String css;//CSS样式
 	private String path;//访问路径
-	private Integer type;//权限类型 1为菜单 2为功能 3为API
+	private Integer type;//权限类型 0为目录 1为菜单 2为按钮
 	private String permission;//具体权限
 	private Integer sort;//排序值
 	private Integer status;//状态：0为禁用，1为启用
