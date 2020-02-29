@@ -17,6 +17,7 @@ public class Permission implements Serializable {
 	private Integer type;//权限类型 0为目录 1为菜单 2为按钮
 	private String permission;//具体权限
 	private Integer sort;//排序值
+	@Column(insertable = false)
 	private Integer status;//状态：0为禁用，1为启用
 	@Column(insertable = false, updatable = false)
 	private java.util.Date createTime;//创建时间
