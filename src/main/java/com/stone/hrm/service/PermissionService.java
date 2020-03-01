@@ -69,4 +69,11 @@ public interface PermissionService {
      * @return
      */
     JSONArray findAllToTree();
+
+    /**
+     * 修改权限的状态
+     * @param status
+     * @param id
+     */
+    void updateStatusById(Integer status, Integer id);
 }

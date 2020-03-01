@@ -122,4 +122,15 @@ public class PermissionController {
         return new Result(true,StatusCode.OK,"查询成功",pageResult);
     }
 
+    /**
+     * 修改状态
+     *
+     */
+    @ApiOperation("修改权限状态")
+    @PutMapping(value = "/{id}/status/{status}")
+    public Result updateStatus(@PathVariable Integer id, @PathVariable Integer status) {
+        permissionService.updateStatusById(status, id);
+        return new Result(true, StatusCode.OK, "修改成功");
+    }
+
 }

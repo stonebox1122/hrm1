@@ -9,12 +9,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
@@ -39,6 +41,17 @@ public class PermissionServiceImpl implements PermissionService {
         JSONArray array = new JSONArray();
         TreeUtils.setPermissionsTree(0, permissions, array);
         return array;
+    }
+
+    /**
+     * 修改权限状态
+     * @param status
+     * @param id
+     */
+    @Override
+    public void updateStatusById(Integer status, Integer id) {
+        permissionMapper.updateStatusById(status, id);
+        permissionMapper.updateStatusByParentId(status, id);
     }
 
     /**
