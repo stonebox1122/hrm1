@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,7 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public void update(Role role){
+        role.setUpdateTime(Calendar.getInstance().getTime());
         roleMapper.updateByPrimaryKey(role);
     }
 
@@ -103,6 +105,12 @@ public class RoleServiceImpl implements RoleService {
         Example example = createExample(searchMap);
         return (Page<Role>)roleMapper.selectByExample(example);
     }
+
+    @Override
+    public void updateStatusById(Integer status, Integer id) {
+        roleMapper.updateStatusById(status, id);
+    }
+
 
     /**
      * 构建查询对象

@@ -5,11 +5,14 @@ import com.stone.hrm.common.entity.StatusCode;
 import com.stone.hrm.pojo.Icon;
 import com.stone.hrm.service.IconService;
 import com.github.pagehelper.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Api(tags = "系统管理：图标管理")
 @RestController
 @CrossOrigin
 @RequestMapping("/icon")
@@ -23,6 +26,7 @@ public class IconController {
      * 查询全部数据
      * @return
      */
+    @ApiOperation("查询所有图标")
     @GetMapping
     public Result findAll(){
         List<Icon> iconList = iconService.findAll();
@@ -34,6 +38,7 @@ public class IconController {
      * @param id
      * @return
      */
+    @ApiOperation("查询指定图标")
     @GetMapping("/{id}")
     public Result findById(@PathVariable Integer id){
         Icon icon = iconService.findById(id);
@@ -46,6 +51,7 @@ public class IconController {
      * @param icon
      * @return
      */
+    @ApiOperation("添加图标")
     @PostMapping
     public Result add(@RequestBody Icon icon){
         iconService.add(icon);
@@ -59,6 +65,7 @@ public class IconController {
      * @param id
      * @return
      */
+    @ApiOperation("修改图标")
     @PutMapping(value="/{id}")
     public Result update(@RequestBody Icon icon,@PathVariable Integer id){
         icon.setId(id);
@@ -72,6 +79,7 @@ public class IconController {
      * @param id
      * @return
      */
+    @ApiOperation("删除图标")
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable Integer id){
         iconService.delete(id);
@@ -83,6 +91,7 @@ public class IconController {
      * @param searchMap
      * @return
      */
+    @ApiOperation("根据条件查询图标")
     @GetMapping(value = "/search" )
     public Result findList(@RequestParam Map searchMap){
         List<Icon> list = iconService.findList(searchMap);
@@ -97,6 +106,7 @@ public class IconController {
      * @param size
      * @return
      */
+    @ApiOperation("根据条件查询图标并分页显示")
     @GetMapping(value = "/search/{page}/{size}" )
     public Result findPage(@RequestParam Map searchMap, @PathVariable  int page, @PathVariable  int size){
         Page<Icon> pageList = iconService.findPage(searchMap, page, size);

@@ -62,5 +62,7 @@ public interface RoleService {
      * @return
      */
     Page<Role> findPage(Map<String, Object> searchMap, int page, int size);
-    
+
+    void updateStatusById(Integer status, Integer id);
+
 }
