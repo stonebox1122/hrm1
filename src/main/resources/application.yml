@@ -31,10 +31,10 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Shanghai
-  devtools:
-    restart:
-      #需要实时更新的目录
-      additional-paths: resources/**
+#  devtools:
+#    restart:
+#      #需要实时更新的目录
+#      additional-paths: resources/**
 
 mybatis:
   type-aliases-package: com.stone.hrm.pojo

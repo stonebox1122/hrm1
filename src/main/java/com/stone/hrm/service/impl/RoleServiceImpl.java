@@ -1,12 +1,17 @@
 package com.stone.hrm.service.impl;
 
 import com.stone.hrm.dao.RoleMapper;
+import com.stone.hrm.dao.RolePermissionMapper;
+import com.stone.hrm.dto.RoleDto;
+import com.stone.hrm.pojo.RolePermission;
 import com.stone.hrm.service.RoleService;
 import com.stone.hrm.pojo.Role;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Calendar;
@@ -14,10 +19,14 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleMapper roleMapper;
+
+    @Autowired
+    private RolePermissionMapper rolePermissionMapper;
 
     /**
      * 查询全部列表
@@ -109,6 +118,25 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void updateStatusById(Integer status, Integer id) {
         roleMapper.updateStatusById(status, id);
+    }
+
+    @Override
+    public void addRoleAndPermission(RoleDto roleDto) {
+        Role role = new Role();
+        role.setName(roleDto.getName());
+        role.setDescription(roleDto.getDescription());
+        int roleId = roleMapper.insert(role);
+
+        String pids = roleDto.getPermissionIds();
+        if (!StringUtils.isEmpty(pids)) {
+            String[] permissionIds = pids.split(",");
+            for (String permissionId : permissionIds) {
+                RolePermission rolePermission = new RolePermission();
+                rolePermission.setRoleId(roleId);
+                rolePermission.setPermissionId(Integer.valueOf(permissionId));
+                rolePermissionMapper.insert(rolePermission);
+            }
+        }
     }
 
 

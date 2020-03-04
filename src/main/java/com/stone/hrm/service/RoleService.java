@@ -1,5 +1,6 @@
 package com.stone.hrm.service;
 
+import com.stone.hrm.dto.RoleDto;
 import com.stone.hrm.pojo.Role;
 import com.github.pagehelper.Page;
 
@@ -65,4 +66,5 @@ public interface RoleService {
 
     void updateStatusById(Integer status, Integer id);
 
+    void addRoleAndPermission(RoleDto roleDto);
 }

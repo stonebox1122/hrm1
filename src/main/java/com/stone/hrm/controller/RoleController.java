@@ -2,6 +2,7 @@ package com.stone.hrm.controller;
 import com.stone.hrm.common.entity.PageResult;
 import com.stone.hrm.common.entity.Result;
 import com.stone.hrm.common.entity.StatusCode;
+import com.stone.hrm.dto.RoleDto;
 import com.stone.hrm.service.RoleService;
 import com.stone.hrm.pojo.Role;
 import com.github.pagehelper.Page;
@@ -51,10 +52,22 @@ public class RoleController {
      * @param role
      * @return
      */
+//    @ApiOperation("添加角色")
+//    @PostMapping
+//    public Result add(@RequestBody Role role){
+//        roleService.add(role);
+//        return new Result(true,StatusCode.OK,"添加成功");
+//    }
+
+    /**
+     * 新增角色及其权限
+     * @param roleDto
+     * @return
+     */
     @ApiOperation("添加角色")
     @PostMapping
-    public Result add(@RequestBody Role role){
-        roleService.add(role);
+    public Result addRoleAndPermission(@RequestBody RoleDto roleDto){
+        roleService.addRoleAndPermission(roleDto);
         return new Result(true,StatusCode.OK,"添加成功");
     }
 

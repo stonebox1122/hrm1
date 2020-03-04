@@ -3,6 +3,7 @@ package com.stone.hrm.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -14,8 +15,11 @@ public class Role implements Serializable, GrantedAuthority {
 	private Integer id;//角色ID
 	private String name;//角色名称
 	private String description;//角色描述
+	@Column(insertable = false)
 	private Integer status;//状态：0为禁用，1为启用
+	@Column(insertable = false, updatable = false)
 	private java.util.Date createTime;//创建时间
+	@Column(insertable = false)
 	private java.util.Date updateTime;//更新时间
 
 	
