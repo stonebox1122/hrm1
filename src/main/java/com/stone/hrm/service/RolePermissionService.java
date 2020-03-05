@@ -64,6 +64,7 @@ public interface RolePermissionService {
     Page<RolePermission> findPage(Map<String, Object> searchMap, int page, int size);
 
 
+    List<RolePermission> findByRoleId(Integer roleId);
 
-
+    void updateByRoleId(Integer roleId, String pids);
 }

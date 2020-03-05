@@ -7,12 +7,15 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Autowired
@@ -102,6 +105,25 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         PageHelper.startPage(page,size);
         Example example = createExample(searchMap);
         return (Page<RolePermission>)rolePermissionMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<RolePermission> findByRoleId(Integer roleId) {
+        return rolePermissionMapper.findByRoleId(roleId);
+    }
+
+    @Override
+    public void updateByRoleId(Integer roleId, String pids) {
+        rolePermissionMapper.deleteByRoleId(roleId);
+        if (!StringUtils.isEmpty(pids)) {
+            String[] permissionIds = pids.split(",");
+            for (String permissionId : permissionIds) {
+                RolePermission rolePermission = new RolePermission();
+                rolePermission.setRoleId(roleId);
+                rolePermission.setPermissionId(Integer.valueOf(permissionId));
+                rolePermissionMapper.insert(rolePermission);
+            }
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package com.stone.hrm.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 public class Role implements Serializable, GrantedAuthority {
 
 	@Id
+	@KeySql(useGeneratedKeys = true)
 	private Integer id;//角色ID
 	private String name;//角色名称
 	private String description;//角色描述

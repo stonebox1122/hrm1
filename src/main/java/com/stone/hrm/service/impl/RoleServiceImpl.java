@@ -125,7 +125,8 @@ public class RoleServiceImpl implements RoleService {
         Role role = new Role();
         role.setName(roleDto.getName());
         role.setDescription(roleDto.getDescription());
-        int roleId = roleMapper.insert(role);
+        roleMapper.insert(role);
+        Integer roleId = role.getId();
 
         String pids = roleDto.getPermissionIds();
         if (!StringUtils.isEmpty(pids)) {
