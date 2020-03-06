@@ -66,5 +66,5 @@ public interface RolePermissionService {
 
     List<RolePermission> findByRoleId(Integer roleId);
 
-    void updateByRoleId(Integer roleId, String pids);
+    void updateByRoleId(Integer roleId, List<RolePermission> rolePermissionList);
 }

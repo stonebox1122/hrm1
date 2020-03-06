@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +79,7 @@ public class PermissionController {
     @PutMapping(value="/{id}")
     public Result update(@RequestBody Permission permission,@PathVariable Integer id){
         permission.setId(id);
+        permission.setUpdateTime(Calendar.getInstance().getTime());
         permissionService.update(permission);
         return new Result(true,StatusCode.OK,"修改成功");
     }

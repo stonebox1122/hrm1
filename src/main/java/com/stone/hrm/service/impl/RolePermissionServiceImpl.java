@@ -8,6 +8,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
@@ -113,17 +114,22 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    public void updateByRoleId(Integer roleId, String pids) {
+    public void updateByRoleId(Integer roleId, List<RolePermission> rolePermissionList) {
         rolePermissionMapper.deleteByRoleId(roleId);
-        if (!StringUtils.isEmpty(pids)) {
-            String[] permissionIds = pids.split(",");
-            for (String permissionId : permissionIds) {
-                RolePermission rolePermission = new RolePermission();
-                rolePermission.setRoleId(roleId);
-                rolePermission.setPermissionId(Integer.valueOf(permissionId));
+        if (!CollectionUtils.isEmpty(rolePermissionList)) {
+            for (RolePermission rolePermission : rolePermissionList) {
                 rolePermissionMapper.insert(rolePermission);
             }
         }
+//        if (!StringUtils.isEmpty(pids)) {
+//            String[] permissionIds = pids.split(",");
+//            for (String permissionId : permissionIds) {
+//                RolePermission rolePermission = new RolePermission();
+//                rolePermission.setRoleId(roleId);
+//                rolePermission.setPermissionId(Integer.valueOf(permissionId));
+//                rolePermissionMapper.insert(rolePermission);
+//            }
+//        }
     }
 
     /**

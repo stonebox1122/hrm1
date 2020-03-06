@@ -133,9 +133,9 @@ public class RolePermissionController {
      */
     @ApiOperation("修改角色对应的权限")
     @PostMapping(value = "/role/{roleId}" )
-    public Result updateByRoleId(@PathVariable Integer roleId, @RequestBody String pids){
-        rolePermissionService.updateByRoleId(roleId, pids);
-        return new Result(true,StatusCode.OK,"删除成功");
+    public Result updateByRoleId(@PathVariable Integer roleId, @RequestBody List<RolePermission> rolePermissionList){
+        rolePermissionService.updateByRoleId(roleId, rolePermissionList);
+        return new Result(true,StatusCode.OK,"修改角色成功");
     }
 
 }
