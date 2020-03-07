@@ -129,10 +129,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(searchMap.get("state")!=null && !"".equals(searchMap.get("state"))){
                 criteria.andLike("state","%"+searchMap.get("state")+"%");
            	}
-            // 领导工号
-            if(searchMap.get("managername")!=null && !"".equals(searchMap.get("managername"))){
-                criteria.andLike("managername","%"+searchMap.get("managername")+"%");
-           	}
             // 性别
             if(searchMap.get("sex")!=null && !"".equals(searchMap.get("sex"))){
                 criteria.andLike("sex","%"+searchMap.get("sex")+"%");
@@ -169,10 +165,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(searchMap.get("graduation_school")!=null && !"".equals(searchMap.get("graduation_school"))){
                 criteria.andLike("graduation_school","%"+searchMap.get("graduation_school")+"%");
            	}
-            // 职位编码
-            if(searchMap.get("job_code")!=null && !"".equals(searchMap.get("job_code"))){
-                criteria.andLike("job_code","%"+searchMap.get("job_code")+"%");
-           	}
             // 银行名称
             if(searchMap.get("bank_name")!=null && !"".equals(searchMap.get("bank_name"))){
                 criteria.andLike("bank_name","%"+searchMap.get("bank_name")+"%");
@@ -193,6 +185,14 @@ public class EmployeeServiceImpl implements EmployeeService {
             // ID
             if(searchMap.get("id")!=null ){
                 criteria.andEqualTo("id",searchMap.get("id"));
+            }
+            // 父级ID
+            if(searchMap.get("pid")!=null ){
+                criteria.andEqualTo("pid",searchMap.get("pid"));
+            }
+            // 职位编码
+            if(searchMap.get("jobId")!=null ){
+                criteria.andEqualTo("jobId",searchMap.get("jobId"));
             }
 
         }

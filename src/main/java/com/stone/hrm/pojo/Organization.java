@@ -21,10 +21,10 @@ public class Organization implements Serializable {
 
 
 	
+	private Integer pid;//父级ID
 	private String name;//组织名称
-	private String code;//组织编码
+	private String code;//组织代码
 	private String address;//组织地址
-	private String businessLicenseId;//营业执照ID
 	private String legalRepresentative;//法人代表
 	private String phone;//组织电话
 	private String mail;//组织邮箱
@@ -41,6 +41,13 @@ public class Organization implements Serializable {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getPid() {
+		return pid;
+	}
+	public void setPid(Integer pid) {
+		this.pid = pid;
 	}
 
 	public String getName() {
@@ -62,13 +69,6 @@ public class Organization implements Serializable {
 	}
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getBusinessLicenseId() {
-		return businessLicenseId;
-	}
-	public void setBusinessLicenseId(String businessLicenseId) {
-		this.businessLicenseId = businessLicenseId;
 	}
 
 	public String getLegalRepresentative() {

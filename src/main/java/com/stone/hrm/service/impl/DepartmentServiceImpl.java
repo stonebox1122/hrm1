@@ -121,18 +121,18 @@ public class DepartmentServiceImpl implements DepartmentService {
             if(searchMap.get("code")!=null && !"".equals(searchMap.get("code"))){
                 criteria.andLike("code","%"+searchMap.get("code")+"%");
            	}
-            // 组织编码
-            if(searchMap.get("organization_code")!=null && !"".equals(searchMap.get("organization_code"))){
-                criteria.andLike("organization_code","%"+searchMap.get("organization_code")+"%");
-           	}
-            // 父级部门编码
-            if(searchMap.get("pcode")!=null && !"".equals(searchMap.get("pcode"))){
-                criteria.andLike("pcode","%"+searchMap.get("pcode")+"%");
-           	}
 
             // ID
             if(searchMap.get("id")!=null ){
                 criteria.andEqualTo("id",searchMap.get("id"));
+            }
+            // 父级ID
+            if(searchMap.get("pid")!=null ){
+                criteria.andEqualTo("pid",searchMap.get("pid"));
+            }
+            // 组织ID
+            if(searchMap.get("organizationId")!=null ){
+                criteria.andEqualTo("organizationId",searchMap.get("organizationId"));
             }
             // 状态：0为禁用，1为启用
             if(searchMap.get("status")!=null ){

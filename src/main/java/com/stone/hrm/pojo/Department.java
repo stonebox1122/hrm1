@@ -21,10 +21,10 @@ public class Department implements Serializable {
 
 
 	
+	private Integer pid;//父级ID
 	private String name;//部门名称
 	private String code;//部门编码
-	private String organizationCode;//组织编码
-	private String pcode;//父级部门编码
+	private Integer organizationId;//组织ID
 	@Column(insertable = false)
 	private Integer status;//状态：0为禁用，1为启用
 	@Column(insertable = false, updatable = false)
@@ -38,6 +38,13 @@ public class Department implements Serializable {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getPid() {
+		return pid;
+	}
+	public void setPid(Integer pid) {
+		this.pid = pid;
 	}
 
 	public String getName() {
@@ -54,18 +61,11 @@ public class Department implements Serializable {
 		this.code = code;
 	}
 
-	public String getOrganizationCode() {
-		return organizationCode;
+	public Integer getOrganizationId() {
+		return organizationId;
 	}
-	public void setOrganizationCode(String organizationCode) {
-		this.organizationCode = organizationCode;
-	}
-
-	public String getPcode() {
-		return pcode;
-	}
-	public void setPcode(String pcode) {
-		this.pcode = pcode;
+	public void setOrganizationId(Integer organizationId) {
+		this.organizationId = organizationId;
 	}
 
 	public Integer getStatus() {

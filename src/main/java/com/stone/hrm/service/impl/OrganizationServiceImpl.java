@@ -1,18 +1,22 @@
 package com.stone.hrm.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.stone.hrm.common.util.TreeUtils;
 import com.stone.hrm.dao.OrganizationMapper;
 import com.stone.hrm.pojo.Organization;
 import com.stone.hrm.service.OrganizationService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class OrganizationServiceImpl implements OrganizationService {
 
     @Autowired
@@ -64,6 +68,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public void delete(Integer id){
         organizationMapper.deleteByPrimaryKey(id);
+        organizationMapper.deleteByParentId(id);
     }
 
 
@@ -104,6 +109,20 @@ public class OrganizationServiceImpl implements OrganizationService {
         return (Page<Organization>)organizationMapper.selectByExample(example);
     }
 
+    @Override
+    public JSONArray findAllToTree() {
+        List<Organization> organizations = organizationMapper.selectAll();
+        JSONArray array = new JSONArray();
+        TreeUtils.setOrganizationsTree(0, organizations, array);
+        return array;
+    }
+
+    @Override
+    public void updateStatusById(Integer status, Integer id) {
+        organizationMapper.updateStatusById(status, id);
+        organizationMapper.updateStatusByParentId(status, id);
+    }
+
     /**
      * 构建查询对象
      * @param searchMap
@@ -117,17 +136,13 @@ public class OrganizationServiceImpl implements OrganizationService {
             if(searchMap.get("name")!=null && !"".equals(searchMap.get("name"))){
                 criteria.andLike("name","%"+searchMap.get("name")+"%");
            	}
-            // 组织编码
+            // 组织代码
             if(searchMap.get("code")!=null && !"".equals(searchMap.get("code"))){
                 criteria.andLike("code","%"+searchMap.get("code")+"%");
            	}
             // 组织地址
             if(searchMap.get("address")!=null && !"".equals(searchMap.get("address"))){
                 criteria.andLike("address","%"+searchMap.get("address")+"%");
-           	}
-            // 营业执照ID
-            if(searchMap.get("business_license_id")!=null && !"".equals(searchMap.get("business_license_id"))){
-                criteria.andLike("business_license_id","%"+searchMap.get("business_license_id")+"%");
            	}
             // 法人代表
             if(searchMap.get("legal_representative")!=null && !"".equals(searchMap.get("legal_representative"))){
@@ -145,6 +160,10 @@ public class OrganizationServiceImpl implements OrganizationService {
             // ID
             if(searchMap.get("id")!=null ){
                 criteria.andEqualTo("id",searchMap.get("id"));
+            }
+            // 父级ID
+            if(searchMap.get("pid")!=null ){
+                criteria.andEqualTo("pid",searchMap.get("pid"));
             }
             // 状态：0为禁用，1为启用
             if(searchMap.get("status")!=null ){

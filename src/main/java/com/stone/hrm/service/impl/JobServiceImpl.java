@@ -121,14 +121,14 @@ public class JobServiceImpl implements JobService {
             if(searchMap.get("code")!=null && !"".equals(searchMap.get("code"))){
                 criteria.andLike("code","%"+searchMap.get("code")+"%");
            	}
-            // 部门编码
-            if(searchMap.get("department_code")!=null && !"".equals(searchMap.get("department_code"))){
-                criteria.andLike("department_code","%"+searchMap.get("department_code")+"%");
-           	}
 
             // ID
             if(searchMap.get("id")!=null ){
                 criteria.andEqualTo("id",searchMap.get("id"));
+            }
+            // 部门编码
+            if(searchMap.get("departmentId")!=null ){
+                criteria.andEqualTo("departmentId",searchMap.get("departmentId"));
             }
             // 状态：0为禁用，1为启用
             if(searchMap.get("status")!=null ){

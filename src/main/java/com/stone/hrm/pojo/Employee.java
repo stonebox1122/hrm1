@@ -21,11 +21,11 @@ public class Employee implements Serializable {
 
 
 	
+	private Integer pid;//父级ID
 	private String name;//员工姓名
 	private String username;//员工工号
 	private String password;//登录密码
 	private String state;//在职状态
-	private String managername;//领导工号
 	private String sex;//性别
 	private String phone;//手机
 	private String mail;//邮箱
@@ -38,7 +38,7 @@ public class Employee implements Serializable {
 	private String degree;//学位
 	private String graduationSchool;//毕业院校
 	private java.util.Date graduationDate;//毕业时间
-	private String jobCode;//职位编码
+	private Integer jobId;//职位编码
 	private String bankName;//银行名称
 	private String bankNumber;//银行卡号
 	private String politicalVisage;//政治面貌
@@ -54,6 +54,13 @@ public class Employee implements Serializable {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getPid() {
+		return pid;
+	}
+	public void setPid(Integer pid) {
+		this.pid = pid;
 	}
 
 	public String getName() {
@@ -82,13 +89,6 @@ public class Employee implements Serializable {
 	}
 	public void setState(String state) {
 		this.state = state;
-	}
-
-	public String getManagername() {
-		return managername;
-	}
-	public void setManagername(String managername) {
-		this.managername = managername;
 	}
 
 	public String getSex() {
@@ -175,11 +175,11 @@ public class Employee implements Serializable {
 		this.graduationDate = graduationDate;
 	}
 
-	public String getJobCode() {
-		return jobCode;
+	public Integer getJobId() {
+		return jobId;
 	}
-	public void setJobCode(String jobCode) {
-		this.jobCode = jobCode;
+	public void setJobId(Integer jobId) {
+		this.jobId = jobId;
 	}
 
 	public String getBankName() {

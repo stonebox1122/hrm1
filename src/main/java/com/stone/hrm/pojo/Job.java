@@ -23,7 +23,7 @@ public class Job implements Serializable {
 	
 	private String name;//职位名称
 	private String code;//职位编码
-	private String departmentCode;//部门编码
+	private Integer departmentId;//部门编码
 	@Column(insertable = false)
 	private Integer status;//状态：0为禁用，1为启用
 	@Column(insertable = false, updatable = false)
@@ -53,11 +53,11 @@ public class Job implements Serializable {
 		this.code = code;
 	}
 
-	public String getDepartmentCode() {
-		return departmentCode;
+	public Integer getDepartmentId() {
+		return departmentId;
 	}
-	public void setDepartmentCode(String departmentCode) {
-		this.departmentCode = departmentCode;
+	public void setDepartmentId(Integer departmentId) {
+		this.departmentId = departmentId;
 	}
 
 	public Integer getStatus() {

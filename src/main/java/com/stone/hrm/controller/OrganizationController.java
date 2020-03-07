@@ -1,14 +1,19 @@
 package com.stone.hrm.controller;
+import com.alibaba.fastjson.JSONArray;
 import com.stone.hrm.common.entity.PageResult;
 import com.stone.hrm.common.entity.Result;
 import com.stone.hrm.common.entity.StatusCode;
 import com.stone.hrm.pojo.Organization;
 import com.stone.hrm.service.OrganizationService;
 import com.github.pagehelper.Page;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/organization")
@@ -61,6 +66,7 @@ public class OrganizationController {
     @PutMapping(value="/{id}")
     public Result update(@RequestBody Organization organization,@PathVariable Integer id){
         organization.setId(id);
+        organization.setUpdateTime(Calendar.getInstance().getTime());
         organizationService.update(organization);
         return new Result(true,StatusCode.OK,"修改成功");
     }
@@ -103,5 +109,22 @@ public class OrganizationController {
         return new Result(true,StatusCode.OK,"查询成功",pageResult);
     }
 
+    @ApiOperation("查询所有组织返回树形数据")
+    @GetMapping("/tree")
+    public Result findAllToTree(){
+        JSONArray organizationTree = organizationService.findAllToTree();
+        return new Result(true, StatusCode.OK,"查询成功",organizationTree);
+    }
+
+    /**
+     * 修改状态
+     *
+     */
+    @ApiOperation("修改组织状态")
+    @PutMapping(value = "/{id}/status/{status}")
+    public Result updateStatus(@PathVariable Integer id, @PathVariable Integer status) {
+        organizationService.updateStatusById(status, id);
+        return new Result(true, StatusCode.OK, "修改成功");
+    }
 
 }

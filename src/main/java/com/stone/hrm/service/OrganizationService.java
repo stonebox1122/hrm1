@@ -1,5 +1,6 @@
 package com.stone.hrm.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.stone.hrm.pojo.Organization;
 
@@ -63,7 +64,16 @@ public interface OrganizationService {
      */
     Page<Organization> findPage(Map<String, Object> searchMap, int page, int size);
 
+    /**
+     * 查询所有组织返回树形数据
+     * @return
+     */
+    JSONArray findAllToTree();
 
-
-
+    /**
+     * 修改组织状态
+     * @param status
+     * @param id
+     */
+    void updateStatusById(Integer status, Integer id);
 }
