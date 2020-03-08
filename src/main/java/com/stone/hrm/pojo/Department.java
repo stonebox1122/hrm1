@@ -25,6 +25,7 @@ public class Department implements Serializable {
 	private String name;//部门名称
 	private String code;//部门编码
 	private Integer organizationId;//组织ID
+	private Integer managerId;//经理ID
 	@Column(insertable = false)
 	private Integer status;//状态：0为禁用，1为启用
 	@Column(insertable = false, updatable = false)
@@ -89,6 +90,11 @@ public class Department implements Serializable {
 		this.updateTime = updateTime;
 	}
 
+	public Integer getManagerId() {
+		return managerId;
+	}
 
-
+	public void setManagerId(Integer managerId) {
+		this.managerId = managerId;
+	}
 }

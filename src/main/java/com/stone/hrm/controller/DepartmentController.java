@@ -1,12 +1,16 @@
 package com.stone.hrm.controller;
+import com.alibaba.fastjson.JSONArray;
 import com.stone.hrm.common.entity.PageResult;
 import com.stone.hrm.common.entity.Result;
 import com.stone.hrm.common.entity.StatusCode;
 import com.stone.hrm.pojo.Department;
 import com.stone.hrm.service.DepartmentService;
 import com.github.pagehelper.Page;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +66,7 @@ public class DepartmentController {
     @PutMapping(value="/{id}")
     public Result update(@RequestBody Department department,@PathVariable Integer id){
         department.setId(id);
+        department.setUpdateTime(Calendar.getInstance().getTime());
         departmentService.update(department);
         return new Result(true,StatusCode.OK,"修改成功");
     }
@@ -104,5 +109,21 @@ public class DepartmentController {
         return new Result(true,StatusCode.OK,"查询成功",pageResult);
     }
 
+    @ApiOperation("查询所有部门返回树形数据")
+    @GetMapping("/tree")
+    public Result findAllToTree(){
+        JSONArray departmentTree = departmentService.findAllToTree();
+        return new Result(true, StatusCode.OK,"查询成功",departmentTree);
+    }
 
+    /**
+     * 修改状态
+     *
+     */
+    @ApiOperation("修改部门状态")
+    @PutMapping(value = "/{id}/status/{status}")
+    public Result updateStatus(@PathVariable Integer id, @PathVariable Integer status) {
+        departmentService.updateStatusById(status, id);
+        return new Result(true, StatusCode.OK, "修改成功");
+    }
 }

@@ -104,5 +104,13 @@ public class EmployeeController {
         return new Result(true,StatusCode.OK,"查询成功",pageResult);
     }
 
-
+    /**
+     * 查询全部主管数据
+     * @return
+     */
+    @GetMapping("/manager")
+    public Result findAllManager(){
+        List<Employee> managerList = employeeService.findAllManager();
+        return new Result(true, StatusCode.OK,"查询成功",managerList) ;
+    }
 }

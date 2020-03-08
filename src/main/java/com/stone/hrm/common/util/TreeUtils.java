@@ -2,6 +2,7 @@ package com.stone.hrm.common.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.stone.hrm.pojo.Department;
 import com.stone.hrm.pojo.Organization;
 import com.stone.hrm.pojo.Permission;
 
@@ -54,6 +55,28 @@ public class TreeUtils {
                     JSONArray children = new JSONArray();
                     parent.put("children", children);
                     setOrganizationsTree(org.getId(), organizationsAll, children);
+                }
+            }
+        }
+    }
+
+    /**
+     * 部门架构树
+     *
+     * @param parentId
+     * @param departmentsAll
+     * @param array
+     */
+    public static void setDepartmentsTree(Integer parentId, List<Department> departmentsAll, JSONArray array) {
+        for (Department dept : departmentsAll) {
+            if (dept.getPid().equals(parentId)) {
+                String string = JSONObject.toJSONString(dept);
+                JSONObject parent = (JSONObject) JSONObject.parse(string);
+                array.add(parent);
+                if (departmentsAll.stream().filter(d -> d.getPid().equals(dept.getId())).findAny() != null) {
+                    JSONArray children = new JSONArray();
+                    parent.put("children", children);
+                    setDepartmentsTree(dept.getId(), departmentsAll, children);
                 }
             }
         }

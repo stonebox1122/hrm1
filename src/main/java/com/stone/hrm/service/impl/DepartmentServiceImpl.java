@@ -1,7 +1,10 @@
 package com.stone.hrm.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.stone.hrm.common.util.TreeUtils;
 import com.stone.hrm.dao.DepartmentMapper;
 import com.stone.hrm.pojo.Department;
+import com.stone.hrm.pojo.Organization;
 import com.stone.hrm.service.DepartmentService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -64,6 +67,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void delete(Integer id){
         departmentMapper.deleteByPrimaryKey(id);
+        departmentMapper.deleteByParentId(id);
     }
 
 
@@ -102,6 +106,20 @@ public class DepartmentServiceImpl implements DepartmentService {
         PageHelper.startPage(page,size);
         Example example = createExample(searchMap);
         return (Page<Department>)departmentMapper.selectByExample(example);
+    }
+
+    @Override
+    public JSONArray findAllToTree() {
+        List<Department> departments = departmentMapper.selectAll();
+        JSONArray array = new JSONArray();
+        TreeUtils.setDepartmentsTree(0, departments, array);
+        return array;
+    }
+
+    @Override
+    public void updateStatusById(Integer status, Integer id) {
+        departmentMapper.updateStatusById(status, id);
+        departmentMapper.updateStatusByParentId(status, id);
     }
 
     /**

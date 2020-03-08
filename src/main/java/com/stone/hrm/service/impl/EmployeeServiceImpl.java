@@ -104,6 +104,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return (Page<Employee>)employeeMapper.selectByExample(example);
     }
 
+    @Override
+    public List<Employee> findAllManager() {
+        return employeeMapper.findAllManager();
+    }
+
     /**
      * 构建查询对象
      * @param searchMap
