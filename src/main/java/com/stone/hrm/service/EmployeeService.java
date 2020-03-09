@@ -63,6 +63,5 @@ public interface EmployeeService {
      */
     Page<Employee> findPage(Map<String, Object> searchMap, int page, int size);
 
-
-    List<Employee> findAllManager();
+    List<Employee> findManagerByOrganizationId(Integer organizationId);
 }

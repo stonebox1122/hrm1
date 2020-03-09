@@ -23,6 +23,7 @@ public class Job implements Serializable {
 	
 	private String name;//职位名称
 	private String code;//职位编码
+	private Integer level;//职位级别，从1级到19级，10级及以上为管理人员或者技术专家
 	private Integer departmentId;//部门编码
 	@Column(insertable = false)
 	private Integer status;//状态：0为禁用，1为启用
@@ -51,6 +52,14 @@ public class Job implements Serializable {
 	}
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
 	}
 
 	public Integer getDepartmentId() {

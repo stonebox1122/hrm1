@@ -38,7 +38,9 @@ public class Employee implements Serializable {
 	private String degree;//学位
 	private String graduationSchool;//毕业院校
 	private java.util.Date graduationDate;//毕业时间
-	private Integer jobId;//职位编码
+	private Integer jobId;//职位ID
+	private Integer departmentId;//部门ID
+	private Integer organizationId;//组织ID
 	private String bankName;//银行名称
 	private String bankNumber;//银行卡号
 	private String politicalVisage;//政治面貌

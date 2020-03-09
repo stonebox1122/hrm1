@@ -3,6 +3,7 @@ package com.stone.hrm.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.stone.hrm.common.util.TreeUtils;
 import com.stone.hrm.dao.DepartmentMapper;
+import com.stone.hrm.dto.DepartmentDto;
 import com.stone.hrm.pojo.Department;
 import com.stone.hrm.pojo.Organization;
 import com.stone.hrm.service.DepartmentService;
@@ -110,7 +111,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public JSONArray findAllToTree() {
-        List<Department> departments = departmentMapper.selectAll();
+        List<DepartmentDto> departments = departmentMapper.findAll();
         JSONArray array = new JSONArray();
         TreeUtils.setDepartmentsTree(0, departments, array);
         return array;
@@ -120,6 +121,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void updateStatusById(Integer status, Integer id) {
         departmentMapper.updateStatusById(status, id);
         departmentMapper.updateStatusByParentId(status, id);
+    }
+
+    @Override
+    public JSONArray findByOrganizationIdToTree(Integer organizationId) {
+        List<DepartmentDto> departments = departmentMapper.findByOrganizationId(organizationId);
+        JSONArray array = new JSONArray();
+        TreeUtils.setDepartmentsTree(0, departments, array);
+        return array;
     }
 
     /**

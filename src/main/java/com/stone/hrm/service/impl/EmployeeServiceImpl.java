@@ -105,8 +105,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findAllManager() {
-        return employeeMapper.findAllManager();
+    public List<Employee> findManagerByOrganizationId(Integer organizationId) {
+        return employeeMapper.findManagerByOrganizationId(organizationId);
     }
 
     /**

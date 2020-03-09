@@ -5,6 +5,7 @@ import com.stone.hrm.common.entity.StatusCode;
 import com.stone.hrm.pojo.Employee;
 import com.stone.hrm.service.EmployeeService;
 import com.github.pagehelper.Page;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -105,12 +106,12 @@ public class EmployeeController {
     }
 
     /**
-     * 查询全部主管数据
+     * 查询指定组织下的全部主管数据
      * @return
      */
-    @GetMapping("/manager")
-    public Result findAllManager(){
-        List<Employee> managerList = employeeService.findAllManager();
+    @GetMapping("/manager/{organizationId}")
+    public Result findManagerByOrganizationId(@PathVariable Integer organizationId){
+        List<Employee> managerList = employeeService.findManagerByOrganizationId(organizationId);
         return new Result(true, StatusCode.OK,"查询成功",managerList) ;
     }
 }

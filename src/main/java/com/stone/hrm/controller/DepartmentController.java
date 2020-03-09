@@ -126,4 +126,11 @@ public class DepartmentController {
         departmentService.updateStatusById(status, id);
         return new Result(true, StatusCode.OK, "修改成功");
     }
+
+    @ApiOperation("根据组织Id查询所有部门返回树形数据")
+    @GetMapping("/tree/{organizationId}")
+    public Result findByOrganizationIdToTree(@PathVariable Integer organizationId){
+        JSONArray departmentTree = departmentService.findByOrganizationIdToTree(organizationId);
+        return new Result(true, StatusCode.OK,"查询成功",departmentTree);
+    }
 }

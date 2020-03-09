@@ -76,4 +76,6 @@ public interface DepartmentService {
      * @param id
      */
     void updateStatusById(Integer status, Integer id);
+
+    JSONArray findByOrganizationIdToTree(Integer organizationId);
 }
