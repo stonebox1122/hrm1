@@ -3,7 +3,7 @@ CREATE TABLE `tb_department` (
   `pid` int(11) DEFAULT NULL COMMENT '父级ID',
   `name` varchar(255) NOT NULL COMMENT '部门名称',
   `code` varchar(255) DEFAULT NULL COMMENT '部门编码',
-  `organization_id` int(11) DEFAULT NULL COMMENT '组织ID',
+  `organization_id` int(11) NOT NULL COMMENT '组织ID',
   `manager_id` int(11) DEFAULT NULL COMMENT '经理ID',
   `status` int(11) DEFAULT '1' COMMENT '状态：0为禁用，1为启用',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -12,7 +12,7 @@ CREATE TABLE `tb_department` (
   UNIQUE KEY `code` (`code`) USING BTREE,
   KEY `organization_id` (`organization_id`),
   CONSTRAINT `tb_department_ibfk_2` FOREIGN KEY (`organization_id`) REFERENCES `tb_organization` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tb_employee` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -33,9 +33,9 @@ CREATE TABLE `tb_employee` (
   `degree` varchar(255) DEFAULT NULL COMMENT '学位',
   `graduation_school` varchar(255) DEFAULT NULL COMMENT '毕业院校',
   `graduation_date` datetime DEFAULT NULL COMMENT '毕业时间',
-  `job_id` int(11) DEFAULT NULL COMMENT '职位ID',
-  `department_id` int(11) DEFAULT NULL COMMENT '部门ID',
-  `organization_id` int(11) DEFAULT NULL COMMENT '组织ID',
+  `job_id` int(11) NOT NULL COMMENT '职位ID',
+  `department_id` int(11) NOT NULL COMMENT '部门ID',
+  `organization_id` int(11) NOT NULL COMMENT '组织ID',
   `bank_name` varchar(255) DEFAULT NULL COMMENT '银行名称',
   `bank_number` varchar(255) DEFAULT NULL COMMENT '银行卡号',
   `political_visage` varchar(255) DEFAULT NULL COMMENT '政治面貌',
@@ -47,7 +47,11 @@ CREATE TABLE `tb_employee` (
   UNIQUE KEY `phone` (`phone`) USING BTREE,
   UNIQUE KEY `id_card` (`id_card`) USING BTREE,
   KEY `job_id` (`job_id`),
-  CONSTRAINT `tb_employee_ibfk_2` FOREIGN KEY (`job_id`) REFERENCES `tb_job` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `department_id` (`department_id`),
+  KEY `organization_id` (`organization_id`),
+  CONSTRAINT `tb_employee_ibfk_2` FOREIGN KEY (`job_id`) REFERENCES `tb_job` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `tb_employee_ibfk_3` FOREIGN KEY (`department_id`) REFERENCES `tb_department` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `tb_employee_ibfk_4` FOREIGN KEY (`organization_id`) REFERENCES `tb_organization` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tb_employeestate` (
@@ -67,14 +71,17 @@ CREATE TABLE `tb_job` (
   `name` varchar(255) NOT NULL COMMENT '职位名称',
   `code` varchar(255) DEFAULT NULL COMMENT '职位编码',
   `level` int(11) NOT NULL COMMENT '职位级别，从1级到19级，10级及以上为管理人员或者技术专家',
-  `department_id` int(11) NOT NULL COMMENT '部门编码',
+  `department_id` int(11) NOT NULL COMMENT '部门ID',
+  `organization_id` int(11) NOT NULL COMMENT '组织ID',
   `status` int(11) DEFAULT '1' COMMENT '状态：0为禁用，1为启用',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`) USING BTREE,
   KEY `department_id` (`department_id`),
-  CONSTRAINT `tb_job_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `tb_department` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `organization_id` (`organization_id`),
+  CONSTRAINT `tb_job_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `tb_department` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `tb_job_ibfk_2` FOREIGN KEY (`organization_id`) REFERENCES `tb_organization` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `tb_leavetype` (
