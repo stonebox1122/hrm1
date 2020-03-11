@@ -1,6 +1,7 @@
 package com.stone.hrm.service;
 
 import com.github.pagehelper.Page;
+import com.stone.hrm.dto.JobDto;
 import com.stone.hrm.pojo.Job;
 
 import java.util.List;
@@ -64,6 +65,7 @@ public interface JobService {
     Page<Job> findPage(Map<String, Object> searchMap, int page, int size);
 
 
+    List<JobDto> findJobDtoAll();
 
-
+    void updateStatusById(Integer status, Integer id);
 }

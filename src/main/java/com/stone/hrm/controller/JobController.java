@@ -2,11 +2,15 @@ package com.stone.hrm.controller;
 import com.stone.hrm.common.entity.PageResult;
 import com.stone.hrm.common.entity.Result;
 import com.stone.hrm.common.entity.StatusCode;
+import com.stone.hrm.dto.JobDto;
 import com.stone.hrm.pojo.Job;
 import com.stone.hrm.service.JobService;
 import com.github.pagehelper.Page;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 @RestController
@@ -24,8 +28,8 @@ public class JobController {
      */
     @GetMapping
     public Result findAll(){
-        List<Job> jobList = jobService.findAll();
-        return new Result(true, StatusCode.OK,"查询成功",jobList) ;
+        List<JobDto> jobDtoList = jobService.findJobDtoAll();
+        return new Result(true, StatusCode.OK,"查询成功",jobDtoList) ;
     }
 
     /***
@@ -61,6 +65,7 @@ public class JobController {
     @PutMapping(value="/{id}")
     public Result update(@RequestBody Job job,@PathVariable Integer id){
         job.setId(id);
+        job.setUpdateTime(Calendar.getInstance().getTime());
         jobService.update(job);
         return new Result(true,StatusCode.OK,"修改成功");
     }
@@ -103,5 +108,15 @@ public class JobController {
         return new Result(true,StatusCode.OK,"查询成功",pageResult);
     }
 
+    /**
+     * 修改状态
+     *
+     */
+    @ApiOperation("修改职位状态")
+    @PutMapping(value = "/{id}/status/{status}")
+    public Result updateStatus(@PathVariable Integer id, @PathVariable Integer status) {
+        jobService.updateStatusById(status, id);
+        return new Result(true, StatusCode.OK, "修改成功");
+    }
 
 }

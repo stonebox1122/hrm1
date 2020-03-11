@@ -20,6 +20,5 @@ public interface DepartmentMapper extends Mapper<Department> {
 
     List<DepartmentDto> findAll();
 
-    @Select("select * from tb_department where organization_id=#{organizationId}")
     List<DepartmentDto> findByOrganizationId(@Param("organizationId") Integer organizationId);
 }

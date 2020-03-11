@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stone.hrm.dao.JobMapper">
+
+    <select id="selectJobDtoAll" resultType="com.stone.hrm.dto.JobDto">
+		SELECT
+            t1.id,
+            t1.name,
+            t1.code,
+            t1.level,
+            t1.department_id,
+            t1.organization_id,
+            t2.name department_name,
+            t3.name organization_name,
+            t1.status,
+            t1.create_time,
+            t1.update_time
+        FROM
+            tb_job t1,
+            tb_department t2,
+            tb_organization t3
+        WHERE
+            t1.department_id = t2.id
+        AND t1.organization_id = t3.id
+	</select>
+</mapper>

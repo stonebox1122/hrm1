@@ -1,6 +1,7 @@
 package com.stone.hrm.service.impl;
 
 import com.stone.hrm.dao.JobMapper;
+import com.stone.hrm.dto.JobDto;
 import com.stone.hrm.pojo.Job;
 import com.stone.hrm.service.JobService;
 import com.github.pagehelper.Page;
@@ -102,6 +103,16 @@ public class JobServiceImpl implements JobService {
         PageHelper.startPage(page,size);
         Example example = createExample(searchMap);
         return (Page<Job>)jobMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<JobDto> findJobDtoAll() {
+        return jobMapper.selectJobDtoAll();
+    }
+
+    @Override
+    public void updateStatusById(Integer status, Integer id) {
+        jobMapper.updateStatusById(status, id);
     }
 
     /**
